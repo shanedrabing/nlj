@@ -1,4 +1,4 @@
-# JOHNSON
+# JOHNSON SU DISTRIBUTION
 
 
 djohnson <- function(x, gamma = 0, delta = 1, xi = 0, lambda = 1) {
@@ -143,6 +143,8 @@ str(df)
     summary(lm(mpg ~ hp + wt))
     summary(lm(log(mpg) ~ log(hp) + log(wt)))
     summary(lm(jmpg$z ~ jhp$z + jwt$z))
+
+    summary(lm(mpg ~ hp + wt + disp + drat + qsec))
 
     response <- mpg
     predictors <- list(hp, wt, disp, drat, qsec)
