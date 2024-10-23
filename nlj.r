@@ -1,13 +1,13 @@
 # GENERAL
 
 
-# generalized inverse hyperbolic sin 
-tasinh <- function(x, loc = 0, scl = 1) {
-    asinh((x - loc) / scl)
+# generalized inverse hyperbolic sine
+gasinh <- function(x, xi = 0, lambda = 1) {
+    asinh((x - xi) / lambda)
 }
 
-inverse.tasinh <- function(y, loc = 0, scl = 1) {
-    loc + scl * sinh(y)
+inverse.gasinh <- function(y, xi = 0, lambda = 1) {
+    sinh(y) * lambda + xi
 }
 
 # total absolute deviation from theoretical CDF
@@ -94,11 +94,11 @@ zjohnson <- function(x) {
 }
 
 
-# JOINT NORMALIZATION
+# GENERALIZED ASINH TRANSFORMATION MODEL (GATM)
 
 
-use.tasinh <- function(i, preds, prm) {
-    tasinh(preds[[i]], prm[2 * i + 1], prm[2 * i + 2])
+use.gasinh <- function(i, preds, prm) {
+    gasinh(preds[[i]], prm[2 * i + 1], prm[2 * i + 2])
 }
 
 capply <- function(X, FUN, ...) {
@@ -111,11 +111,11 @@ lm.johnson <- function(resp, preds, iterations = 3, lambda = 1e-9, verbose = FAL
 
     # binding
     evaluate <- function(prm) {
-        y <- tasinh(resp, prm[1], prm[2])
-        x <- capply(1:length(preds), use.tasinh, preds, prm)
+        y <- gasinh(resp, prm[1], prm[2])
+        x <- capply(1:length(preds), use.gasinh, preds, prm)
 
         tryCatch({
-            m <- lm.fit(cbind(1, X), y)
+            m <- lm.fit(cbind(1, x), y)
             loss <- sum(log(cosh(m$residuals)))
             penalty <- lambda * mean(prm ^ 2)
             loss + penalty
@@ -135,15 +135,15 @@ lm.johnson <- function(resp, preds, iterations = 3, lambda = 1e-9, verbose = FAL
 
     # evaluation
     prm <- opt$par
-    y <- tasinh(resp, prm[1], prm[2])
-    x <- capply(1:length(preds), use.tasinh, preds, prm)
-    m <- lm.fit(cbind(1, X), y)
+    y <- gasinh(resp, prm[1], prm[2])
+    x <- capply(1:length(preds), use.gasinh, preds, prm)
+    m <- lm.fit(cbind(1, x), y)
 
     # binding
     detransform <- function(y)
-        inverse.tasinh(y, prm[1], prm[2])
+        inverse.gasinh(y, prm[1], prm[2])
     predict <- function(preds) {
-        x <- rowSums(capply(1:length(preds), use.tasinh, preds, prm))
+        x <- rowSums(capply(1:length(preds), use.gasinh, preds, prm))
         predict(m, data.frame(x))
     }
 
@@ -193,3 +193,5 @@ df <- cbind(mtcars[, c(1, 4, 6, 7)],
 
     dev.off()
 }
+
+round(df, 2)
