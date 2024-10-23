@@ -1,6 +1,15 @@
 # GENERAL
 
 
+capply <- function(X, FUN, ...) {
+    do.call(cbind, lapply(X, FUN, ...))
+}
+
+# total absolute deviation from theoretical CDF
+qqtad <- function(p) {
+    sum(abs(sort(p) - seq(0, 1, length.out = length(p))))
+}
+
 # generalized inverse hyperbolic sine
 gasinh <- function(x, xi = 0, lambda = 1) {
     asinh((x - xi) / lambda)
@@ -10,15 +19,11 @@ inverse.gasinh <- function(y, xi = 0, lambda = 1) {
     sinh(y) * lambda + xi
 }
 
-# total absolute deviation from theoretical CDF
-qqtad <- function(p) {
-    sum(abs(sort(p) - seq(0, 1, length.out = length(p))))
-}
-
 
 # JOHNSON SU DISTRIBUTION
 
 
+# density
 djohnson <- function(x, gamma = 0, delta = 1, xi = 0, lambda = 1) {
     z <- (x - xi) / lambda
     scale <- delta / (lambda * sqrt(2 * pi))
@@ -27,14 +32,17 @@ djohnson <- function(x, gamma = 0, delta = 1, xi = 0, lambda = 1) {
     scale * shape * tail
 }
 
+# cumulative distribution
 pjohnson <- function(q, gamma = 0, delta = 1, xi = 0, lambda = 1) {
     pnorm(gamma + delta * asinh((q - xi) / lambda))
 }
 
+# inverse cumulative distribution
 qjohnson <- function(p, gamma = 0, delta = 1, xi = 0, lambda = 1) {
     xi + lambda * sinh((qnorm(p) - gamma) / delta)
 }
 
+# random deviates
 rjohnson <- function(n, gamma = 0, delta = 1, xi = 0, lambda = 1) {
     lambda * sinh((qnorm(runif(n)) - gamma) / delta) + xi
 }
@@ -43,6 +51,7 @@ rjohnson <- function(n, gamma = 0, delta = 1, xi = 0, lambda = 1) {
 # NORMALIZATION
 
 
+# Z score normalization
 znorm <- function(x) {
     # parameterization
     mu <- mean(x)
@@ -62,6 +71,7 @@ znorm <- function(x) {
          z = normalize(x))
 }
 
+# normalization using the Johnson SU
 zjohnson <- function(x) {
     # parameterization (Q-Q)
     gdxl <- c(gamma = 0, delta = 1, xi = 0, lambda = 1)
@@ -97,17 +107,18 @@ zjohnson <- function(x) {
 # GENERALIZED ASINH TRANSFORMATION MODEL (GATM)
 
 
-use.gasinh <- function(i, preds, prm) {
-    gasinh(preds[[i]], prm[2 * i + 1], prm[2 * i + 2])
-}
+lm.gat <- function(resp, preds,
+                   iterations = 3, penalty = 1e-9, noise = 0,
+                   verbose = FALSE) {
 
-capply <- function(X, FUN, ...) {
-    do.call(cbind, lapply(X, FUN, ...))
-}
-
-lm.johnson <- function(resp, preds, iterations = 3, lambda = 1e-9, verbose = FALSE) {
     # initialization
-    prm <- rep(c(0, 1), 1 + length(preds))
+    n <- 1 + length(preds)
+    prm <- rep(c(0, 1), n) + rnorm(2 * n, 0, noise)
+
+    # helper
+    use.gasinh <- function(i, preds, prm) {
+        gasinh(preds[[i]], prm[2 * i + 1], prm[2 * i + 2])
+    }
 
     # binding
     evaluate <- function(prm) {
@@ -117,8 +128,8 @@ lm.johnson <- function(resp, preds, iterations = 3, lambda = 1e-9, verbose = FAL
         tryCatch({
             m <- lm.fit(cbind(1, x), y)
             loss <- sum(log(cosh(m$residuals)))
-            penalty <- lambda * mean(prm ^ 2)
-            loss + penalty
+            cost <- penalty * mean(prm ^ 2)
+            loss + cost
         }, error = function(e) {
             Inf
         })
@@ -157,41 +168,3 @@ lm.johnson <- function(resp, preds, iterations = 3, lambda = 1e-9, verbose = FAL
          preds = preds,
          z = detransform(m$fitted.values))
 }
-
-
-# TESTING
-
-
-resp <- mtcars$qsec
-preds <- list(mtcars$mpg, mtcars$hp, mtcars$wt)
-
-raw <- with(mtcars, lm(qsec ~ mpg + hp + wt))
-ari <- with(mtcars, lm(log(qsec) ~ log(mpg) + log(hp) + log(wt)))
-geo <- with(mtcars, lm(log(qsec) ~ log(mpg) * log(hp) * log(wt)))
-lmj <- lm.johnson(resp, preds, iterations = 5, lambda = 1e-15, verbose = TRUE)
-
-round(lmj$par, 3)
-
-sum((mtcars$qsec - raw$fitted.values) ^ 2)
-sum((mtcars$qsec - exp(ari$fitted.values)) ^ 2)
-sum((mtcars$qsec - exp(geo$fitted.values)) ^ 2)
-sum((mtcars$qsec - lmj$z) ^ 2)
-
-df <- cbind(mtcars[, c(1, 4, 6, 7)],
-            qsec_raw = raw$fitted.values,
-            qsec_ari = exp(ari$fitted.values),
-            qsec_geo = exp(geo$fitted.values),
-            qsec_lmj = lmj$z)
-
-{
-    pdf("nlj.pdf", 7, 6)
-
-    plot(df$qsec_geo / df$qsec, pch = 16, log = "y")
-    points(df$qsec_raw / df$qsec, pch = 16, col = "orange")
-    points(df$qsec_lmj / df$qsec, pch = 16, col = "green")
-    abline(h = 1, col = "red")
-
-    dev.off()
-}
-
-round(df, 2)
