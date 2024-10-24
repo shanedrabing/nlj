@@ -107,26 +107,30 @@ zjohnson <- function(x) {
 # GENERALIZED ASINH TRANSFORMATION MODEL (GATM)
 
 
-lm.gat <- function(resp, preds,
-                   iterations = 3, penalty = 1e-9, noise = 0,
+lm.gat <- function(formula, data = NULL,
+                   iterations = 1, penalty = 1e-9,
                    verbose = FALSE) {
 
-    # initialization
-    n <- 1 + length(preds)
-    prm <- rep(c(0, 1), n) + rnorm(2 * n, 0, noise)
-
     # helper
-    use.gasinh <- function(i, preds, prm) {
-        gasinh(preds[[i]], prm[2 * i + 1], prm[2 * i + 2])
+    as.df <- as.data.frame
+    use.gasinh <- function(i, df, prm) {
+        gasinh(df[, i], prm[2 * (i - 1) + 1], prm[2 * (i - 1) + 2])
     }
+
+    # subset
+    env <- if (is.null(data)) environment(formula) else as.environment(data)
+    sub <- as.df(sapply(all.vars(formula), get, envir = env))
+
+    # initialization
+    n <- ncol(sub)
+    prm <- rep(c(0, 1), n)
 
     # binding
     evaluate <- function(prm) {
-        y <- gasinh(resp, prm[1], prm[2])
-        x <- capply(1:length(preds), use.gasinh, preds, prm)
+        mut <- setNames(as.df(sapply(1:n, use.gasinh, sub, prm)), names(sub))
 
         tryCatch({
-            m <- lm.fit(cbind(1, x), y)
+            m <- lm(formula, mut)
             loss <- sum(log(cosh(m$residuals)))
             cost <- penalty * mean(prm ^ 2)
             loss + cost
@@ -146,16 +150,16 @@ lm.gat <- function(resp, preds,
 
     # evaluation
     prm <- opt$par
-    y <- gasinh(resp, prm[1], prm[2])
-    x <- capply(1:length(preds), use.gasinh, preds, prm)
-    m <- lm.fit(cbind(1, x), y)
+    mut <- setNames(as.df(sapply(1:n, use.gasinh, sub, prm)), names(sub))
+    m <- lm(formula, mut)
 
     # binding
     detransform <- function(y)
         inverse.gasinh(y, prm[1], prm[2])
-    predict <- function(preds) {
-        x <- rowSums(capply(1:length(preds), use.gasinh, preds, prm))
-        predict(m, data.frame(x))
+    predict <- function(data) {
+        rhs <- all.names(formula)[-(1:3)]
+        sub <- data[, rhs]
+        predict(m, sub)
     }
 
     # return
@@ -164,7 +168,7 @@ lm.gat <- function(resp, preds,
          par = prm,
          fit = m,
          opt = opt,
-         resp = resp,
-         preds = preds,
+         df.sub = sub,
+         df.mut = mut,
          z = detransform(m$fitted.values))
 }
