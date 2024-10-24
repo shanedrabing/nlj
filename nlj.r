@@ -44,7 +44,7 @@ qjohnson <- function(p, gamma = 0, delta = 1, xi = 0, lambda = 1) {
 
 # random deviates
 rjohnson <- function(n, gamma = 0, delta = 1, xi = 0, lambda = 1) {
-    lambda * sinh((qnorm(runif(n)) - gamma) / delta) + xi
+    xi + lambda * sinh((qnorm(runif(n)) - gamma) / delta)
 }
 
 
@@ -61,7 +61,7 @@ znorm <- function(x) {
     normalize <- function(q)
         (q - mu) / sigma
     denormalize <- function(z)
-        sigma * z + mu
+        z * sigma + mu
 
     # return
     list(normalize = normalize,
@@ -98,7 +98,7 @@ zjohnson <- function(x) {
     # return
     list(normalize = normalize,
          denormalize = denormalize,
-         par = opt$par,
+         par = gdxl,
          x = x,
          z = normalize(x))
 }
