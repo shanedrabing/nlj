@@ -1,10 +1,6 @@
 # GENERAL
 
 
-capply <- function(X, FUN, ...) {
-    do.call(cbind, lapply(X, FUN, ...))
-}
-
 # total absolute deviation from theoretical CDF
 qqtad <- function(p) {
     sum(abs(sort(p) - seq(0, 1, length.out = length(p))))
