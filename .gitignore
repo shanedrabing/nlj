@@ -50,3 +50,7 @@ rsconnect/
 
 # custom
 test.*
+.Rproj.user
+inst/doc
+/doc/
+/Meta/

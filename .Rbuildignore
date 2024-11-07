@@ -1,0 +1,10 @@
+^nlj\.Rproj$
+^\.Rproj\.user$
+
+^doc$
+^Meta$
+
+^README\.Rmd$
+^LICENSE\.md$
+
+^dev\.R$
