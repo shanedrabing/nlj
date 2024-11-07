@@ -1,10 +1,12 @@
 Package: nlj
-Title: What the Package Does (One Line, Title Case)
-Version: 0.0.0.9000
+Title: Applications of Johnson's SU-Distribution
+Version: 0.0.1
 Authors@R: 
-    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"),
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
+    person("Shane", "Drabing",
+           email = "shane.drabing@gmail.com",
+           role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0001-9521-6610"))
+Description: No description yet.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
@@ -14,4 +16,3 @@ Suggests:
     rmarkdown,
     testthat (>= 3.0.0)
 VignetteBuilder: knitr
-Config/testthat/edition: 3
