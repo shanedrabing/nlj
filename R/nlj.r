@@ -1,16 +1,39 @@
 # GENERAL
 
 
-# total absolute deviation from theoretical CDF
+#' Total Absolute Deviation from Theoretical CDF
+#'
+#' Calculates the total absolute deviation from a theoretical cumulative distribution function (CDF).
+#'
+#' @param p A numeric vector representing probabilities.
+#' @return A single numeric value representing the total absolute deviation.
+#' @export
 qqtad <- function(p) {
     sum(abs(sort(p) - seq(0, 1, length.out = length(p))))
 }
 
-# generalized inverse hyperbolic sine
+#' Generalized Inverse Hyperbolic Sine Transformation
+#'
+#' Computes the generalized inverse hyperbolic sine transformation.
+#'
+#' @param x A numeric vector to transform.
+#' @param xi Numeric, location parameter.
+#' @param lambda Numeric, scale parameter.
+#' @return A numeric vector of transformed values.
+#' @export
 gasinh <- function(x, xi = 0, lambda = 1) {
     asinh((x - xi) / lambda)
 }
 
+#' Inverse of Generalized Inverse Hyperbolic Sine
+#'
+#' Computes the inverse of the generalized inverse hyperbolic sine transformation.
+#'
+#' @param y A numeric vector to transform back.
+#' @param xi Numeric, location parameter.
+#' @param lambda Numeric, scale parameter.
+#' @return A numeric vector of back-transformed values.
+#' @export
 inverse.gasinh <- function(y, xi = 0, lambda = 1) {
     sinh(y) * lambda + xi
 }
@@ -19,7 +42,17 @@ inverse.gasinh <- function(y, xi = 0, lambda = 1) {
 # JOHNSON SU DISTRIBUTION
 
 
-# density
+#' Density of Johnson SU Distribution
+#'
+#' Computes the density of the Johnson SU distribution.
+#'
+#' @param x A numeric vector of values at which to evaluate the density.
+#' @param gamma Numeric, shape parameter.
+#' @param delta Numeric, shape parameter.
+#' @param xi Numeric, location parameter.
+#' @param lambda Numeric, scale parameter.
+#' @return A numeric vector of density values.
+#' @export
 djohnson <- function(x, gamma = 0, delta = 1, xi = 0, lambda = 1) {
     z <- (x - xi) / lambda
     scale <- delta / (lambda * sqrt(2 * pi))
@@ -28,17 +61,47 @@ djohnson <- function(x, gamma = 0, delta = 1, xi = 0, lambda = 1) {
     scale * shape * tail
 }
 
-# cumulative distribution
+#' Cumulative Distribution of Johnson SU
+#'
+#' Computes the cumulative distribution function of the Johnson SU distribution.
+#'
+#' @param q A numeric vector of quantiles.
+#' @param gamma Numeric, shape parameter.
+#' @param delta Numeric, shape parameter.
+#' @param xi Numeric, location parameter.
+#' @param lambda Numeric, scale parameter.
+#' @return A numeric vector of cumulative probabilities.
+#' @export
 pjohnson <- function(q, gamma = 0, delta = 1, xi = 0, lambda = 1) {
     pnorm(gamma + delta * asinh((q - xi) / lambda))
 }
 
-# inverse cumulative distribution
+#' Inverse Cumulative Distribution of Johnson SU
+#'
+#' Computes the inverse cumulative distribution (quantile function) of the Johnson SU distribution.
+#'
+#' @param p A numeric vector of probabilities.
+#' @param gamma Numeric, shape parameter.
+#' @param delta Numeric, shape parameter.
+#' @param xi Numeric, location parameter.
+#' @param lambda Numeric, scale parameter.
+#' @return A numeric vector of quantiles.
+#' @export
 qjohnson <- function(p, gamma = 0, delta = 1, xi = 0, lambda = 1) {
     xi + lambda * sinh((qnorm(p) - gamma) / delta)
 }
 
-# random deviates
+#' Random Deviates from Johnson SU Distribution
+#'
+#' Generates random deviates from the Johnson SU distribution.
+#'
+#' @param n Number of random values to generate.
+#' @param gamma Numeric, shape parameter.
+#' @param delta Numeric, shape parameter.
+#' @param xi Numeric, location parameter.
+#' @param lambda Numeric, scale parameter.
+#' @return A numeric vector of random deviates.
+#' @export
 rjohnson <- function(n, gamma = 0, delta = 1, xi = 0, lambda = 1) {
     xi + lambda * sinh((qnorm(runif(n)) - gamma) / delta)
 }
@@ -47,7 +110,20 @@ rjohnson <- function(n, gamma = 0, delta = 1, xi = 0, lambda = 1) {
 # NORMALIZATION
 
 
-# Z score normalization
+#' Z-Score Normalization
+#'
+#' Normalizes data using Z-score normalization.
+#'
+#' @param x A numeric vector to normalize.
+#' @return A list containing:
+#'   \describe{
+#'     \item{normalize}{A function that applies the normalization to a new vector.}
+#'     \item{denormalize}{A function that reverses the normalization.}
+#'     \item{par}{A numeric vector of parameters (mean and standard deviation).}
+#'     \item{x}{The original input data.}
+#'     \item{z}{The normalized data.}
+#'   }
+#' @export
 znorm <- function(x) {
     # parameterization
     mu <- mean(x)
@@ -67,7 +143,20 @@ znorm <- function(x) {
          z = normalize(x))
 }
 
-# normalization using the Johnson SU
+#' Johnson SU Normalization
+#'
+#' Normalizes data using the Johnson SU distribution.
+#'
+#' @param x A numeric vector to normalize.
+#' @return A list containing:
+#'   \describe{
+#'     \item{normalize}{A function that applies the Johnson SU normalization.}
+#'     \item{denormalize}{A function that reverses the normalization.}
+#'     \item{par}{A numeric vector of optimized Johnson SU parameters.}
+#'     \item{x}{The original input data.}
+#'     \item{z}{The normalized data.}
+#'   }
+#' @export
 zjohnson <- function(x) {
     # parameterization (Q-Q)
     gdxl <- c(gamma = 0, delta = 1, xi = 0, lambda = 1)
@@ -100,9 +189,30 @@ zjohnson <- function(x) {
 }
 
 
-# GENERALIZED ASINH TRANSFORMATION MODEL (GATM)
+# GENERALIZED ASINH TRANSFORMATION (GAT) MODEL
 
 
+#' Generalized Asinh Transformation (GAT) Model
+#'
+#' Fits a linear model using the generalized asinh transformation.
+#'
+#' @param formula An object of class `formula`.
+#' @param data An optional data frame.
+#' @param iterations Number of iterations for optimization.
+#' @param penalty Penalty for regularization.
+#' @param verbose Logical, if TRUE, prints progress.
+#' @return A list containing:
+#'   \describe{
+#'     \item{predict}{A function to predict new data.}
+#'     \item{detransform}{A function to reverse the transformation.}
+#'     \item{par}{Optimized transformation parameters.}
+#'     \item{fit}{Fitted linear model object.}
+#'     \item{opt}{Optimization object.}
+#'     \item{df.sub}{Subset of data frame used in modeling.}
+#'     \item{df.mut}{Transformed data frame.}
+#'     \item{z}{Detransformed fitted values.}
+#'   }
+#' @export
 lm.gat <- function(formula, data = NULL,
                    iterations = 1, penalty = 1e-9,
                    verbose = FALSE) {
