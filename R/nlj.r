@@ -25,17 +25,17 @@ gasinh <- function(x, xi = 0, lambda = 1) {
     asinh((x - xi) / lambda)
 }
 
-#' Inverse of Generalized Inverse Hyperbolic Sine
+#' Generalized Hyperbolic Sine
 #'
-#' Computes the inverse of the generalized inverse hyperbolic sine transformation.
+#' Computes the the generalized hyperbolic sine transformation.
 #'
-#' @param y A numeric vector to transform back.
+#' @param x A numeric vector to transform back.
 #' @param xi Numeric, location parameter.
 #' @param lambda Numeric, scale parameter.
 #' @return A numeric vector of back-transformed values.
 #' @export
-inverse.gasinh <- function(y, xi = 0, lambda = 1) {
-    sinh(y) * lambda + xi
+gsinh <- function(x, xi = 0, lambda = 1) {
+    sinh(x) * lambda + xi
 }
 
 
@@ -261,7 +261,7 @@ lm.gat <- function(formula, data = NULL,
 
     # binding
     detransform <- function(y)
-        inverse.gasinh(y, prm[1], prm[2])
+        gsinh(y, prm[1], prm[2])
     predict <- function(data) {
         rhs <- all.names(formula)[-(1:3)]
         sub <- data[, rhs]
