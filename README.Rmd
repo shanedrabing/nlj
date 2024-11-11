@@ -13,7 +13,8 @@ knitr::opts_chunk$set(
   fig.path = "man/figures/",
   fig.width = 9,
   fig.height = 6,
-  out.width = "100%"
+  fig.align = "center",
+  out.width = "67%"
 )
 ```
 

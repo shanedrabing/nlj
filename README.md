@@ -47,7 +47,7 @@ plot(x, d, type = "l",
      xlab = "X", ylab = "Density")
 ```
 
-<img src="man/figures/djohnson-1.png" width="100%" />
+<img src="man/figures/djohnson-1.png" width="67%" style="display: block; margin: auto;" />
 
 #### Cumulative Distribution
 
@@ -62,7 +62,7 @@ plot(q, p, type = "l",
      xlab = "Quantile", ylab = "Probability")
 ```
 
-<img src="man/figures/pjohnson-1.png" width="100%" />
+<img src="man/figures/pjohnson-1.png" width="67%" style="display: block; margin: auto;" />
 
 #### Quantile Function
 
@@ -78,7 +78,7 @@ plot(p, q, type = "l",
      xlab = "Probability", ylab = "Quantile")
 ```
 
-<img src="man/figures/qjohnson-1.png" width="100%" />
+<img src="man/figures/qjohnson-1.png" width="67%" style="display: block; margin: auto;" />
 
 #### Random Deviate Generation
 
@@ -129,7 +129,7 @@ legend(min(xd), max(c(yd, yn)),
        lwd = 1, bg = "white")
 ```
 
-<img src="man/figures/normal-density-1.png" width="100%" />
+<img src="man/figures/normal-density-1.png" width="67%" style="display: block; margin: auto;" />
 
 #### Johnson-SU Normalization
 
@@ -158,7 +158,7 @@ legend(min(xd), max(c(yd, yn, yj)),
        lwd = 1, bg = "white")
 ```
 
-<img src="man/figures/johnson-density-1.png" width="100%" />
+<img src="man/figures/johnson-density-1.png" width="67%" style="display: block; margin: auto;" />
 
 ### Generalized Asinh Transformation Model (GATM)
 
@@ -192,4 +192,4 @@ legend(min(x), max(y),
        lwd = 1, bg = "white")
 ```
 
-<img src="man/figures/gatm-1.png" width="100%" />
+<img src="man/figures/gatm-1.png" width="67%" style="display: block; margin: auto;" />
