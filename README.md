@@ -3,19 +3,19 @@
 
 # NLJ
 
-The goal of nlj is to provide functions for statistical transformations,
-distributions, and normalization methods, particularly leveraging the
-Johnson SU distribution and the generalized inverse hyperbolic sine
-transformation.
+This package, `nlj`, is named after the British statistician, Norman
+Lloyd Johnson. Its goal is primarily to provide functions to work with
+the Johnson-SU (unbounded system) distribution. Additionally, automatic
+normalization functions and a generalized transformational regression
+model based off of the inverse hyperbolic sine function are provided.
 
 ## Installation
 
-You can install the development version of nlj from
-[GitHub](https://github.com/) with:
+You can install the development version of `nlj` as follows:
 
 ``` r
-# install.packages("pak")
-pak::pak("shanedrabing/nlj")
+# install.packages("devtools")
+devtools::install_github("shanedrabing/nlj")
 ```
 
 ## Examples
@@ -39,9 +39,9 @@ nlj::djohnson(0, gamma = 0, delta = 1, xi = 0, lambda = 1)
 #### Cumulative Distribution
 
 ``` r
-# Cumulative probability at q = 0.5
-nlj::pjohnson(0.5, gamma = 0, delta = 1, xi = 0, lambda = 1)
-#> [1] 0.684817
+# Cumulative probability at q = 0
+nlj::pjohnson(0, gamma = 0, delta = 1, xi = 0, lambda = 1)
+#> [1] 0.5
 ```
 
 #### Quantile Function
@@ -57,7 +57,7 @@ nlj::qjohnson(0.5, gamma = 0, delta = 1, xi = 0, lambda = 1)
 ``` r
 # Generate 5 random deviates
 nlj::rjohnson(5, gamma = 0, delta = 1, xi = 0, lambda = 1)
-#> [1]  0.8934203 -1.8059235 -6.4829776  0.9324877  1.7761272
+#> [1]  0.3252293 -1.4996651  0.6074520  1.8436328 -0.8068304
 ```
 
 ### Density Estimation Comparison
