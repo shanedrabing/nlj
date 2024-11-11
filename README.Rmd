@@ -8,7 +8,7 @@ output: github_document
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  fig.path = "man/figures/README-",
+  fig.path = "man/figures/README-pressure-1.png",
   out.width = "100%"
 )
 ```
@@ -18,11 +18,14 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of nlj is to ...
+The goal of nlj is to provide functions for statistical transformations,
+distributions, and normalization methods, particularly leveraging the Johnson
+SU distribution and the generalized inverse hyperbolic sine transformation.
 
 ## Installation
 
-You can install the development version of nlj from [GitHub](https://github.com/) with:
+You can install the development version of nlj from
+[GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("pak")
@@ -31,25 +34,121 @@ pak::pak("shanedrabing/nlj")
 
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
+Below are examples showcasing some key functions in the `nlj` package.
 
-```{r example}
+### Total Absolute Deviation from Theoretical CDF
+
+The `qqtad` function calculates the total absolute deviation from a theoretical
+cumulative distribution function (CDF):
+
+```{r example-qqtad}
 library(nlj)
-## basic example code
+
+# Example probabilities
+p <- c(0.1, 0.3, 0.6, 0.8)
+
+# Calculate the total absolute deviation
+qqtad(p)
 ```
 
-What is special about using `README.Rmd` instead of just `README.md`? You can include R chunks like so:
+### Generalized Inverse Hyperbolic Sine Transformation
 
-```{r cars}
-summary(cars)
+The `gasinh` and `inverse.gasinh` functions apply and reverse the generalized
+inverse hyperbolic sine transformation:
+
+```{r example-gasinh}
+x <- c(-1, 0, 1, 2, 3)
+
+# Apply generalized inverse hyperbolic sine transformation
+transformed <- gasinh(x)
+transformed
+
+# Reverse the transformation
+inverse_transformed <- inverse.gasinh(transformed)
+inverse_transformed
 ```
 
-You'll still need to render `README.Rmd` regularly, to keep `README.md` up-to-date. `devtools::build_readme()` is handy for this.
+### Johnson SU Distribution Functions
 
-You can also embed plots, for example:
+The Johnson SU distribution functions `djohnson`, `pjohnson`, `qjohnson`, and
+`rjohnson` provide density, cumulative distribution, quantile, and random
+variate generation capabilities.
 
-```{r pressure, echo = FALSE}
-plot(pressure)
+#### Density
+
+```{r example-djohnson}
+# Density at x = 0
+djohnson(0, gamma = 0, delta = 1, xi = 0, lambda = 1)
 ```
 
-In that case, don't forget to commit and push the resulting figure files, so they display on GitHub and CRAN.
+#### Cumulative Distribution
+
+```{r example-pjohnson}
+# Cumulative probability at q = 0.5
+pjohnson(0.5, gamma = 0, delta = 1, xi = 0, lambda = 1)
+```
+
+#### Quantile Function
+
+```{r example-qjohnson}
+# Quantile for probability p = 0.5
+qjohnson(0.5, gamma = 0, delta = 1, xi = 0, lambda = 1)
+```
+
+#### Random Deviate Generation
+
+```{r example-rjohnson}
+# Generate 5 random deviates
+rjohnson(5, gamma = 0, delta = 1, xi = 0, lambda = 1)
+```
+
+### Z-Score Normalization
+
+The `znorm` function normalizes a numeric vector using Z-score normalization:
+
+```{r example-znorm}
+# Sample data
+x <- c(1, 2, 3, 4, 5)
+
+# Apply Z-score normalization
+z_norm <- znorm(x)
+z_norm$z  # Normalized values
+
+# Reverse the normalization
+denormalized <- z_norm$denormalize(z_norm$z)
+denormalized
+```
+
+### Johnson SU Normalization
+
+The `zjohnson` function normalizes data using the Johnson SU distribution:
+
+```{r example-zjohnson}
+# Normalize using Johnson SU distribution
+johnson_norm <- zjohnson(x)
+johnson_norm$z  # Normalized values
+
+# Reverse the normalization
+denormalized_johnson <- johnson_norm$denormalize(johnson_norm$z)
+denormalized_johnson
+```
+
+### Generalized Asinh Transformation Model (GATM)
+
+The `lm.gat` function fits a linear model using the generalized asinh
+transformation. Here’s an example of its usage:
+
+```{r example-lm.gat}
+# Generate some example data
+set.seed(123)
+example_data <- data.frame(
+  x = rnorm(100),
+  y = 2 * rnorm(100) + 3
+)
+
+# Fit the GATM model
+model <- lm.gat(y ~ x, data = example_data, iterations = 10, penalty = 1e-6, verbose = TRUE)
+
+# View fitted model parameters
+model$par
+```
