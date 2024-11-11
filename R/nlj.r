@@ -181,7 +181,7 @@ zjohnson <- function(x) {
     gdxl <- opt$par
     opt <- stats::optim(gdxl, function(gdxl) {
         p <- pjohnson(x, gdxl[1], gdxl[2], gdxl[3], gdxl[4])
-        ks <- suppressWarnings(stats::ks.test(stats::qnorm(p), "stats::pnorm"))
+        ks <- suppressWarnings(stats::ks.test(stats::qnorm(p), "pnorm"))
         -ks$p.value
     })
 
