@@ -5,11 +5,11 @@
 #'
 #' Calculates the total absolute deviation from a theoretical cumulative distribution function (CDF).
 #'
-#' @param p A numeric vector representing probabilities.
+#' @param p A numeric vector representing sorted probabilities.
 #' @return A single numeric value representing the total absolute deviation.
 #' @export
 qqtad <- function(p) {
-    sum(abs(sort(p) - seq(0, 1, length.out = length(p))))
+    sum(abs(p - seq(0, 1, length.out = length(p))))
 }
 
 #' Generalized Inverse Hyperbolic Sine Transformation
@@ -134,11 +134,23 @@ znorm <- function(x) {
         (q - mu) / sigma
     denormalize <- function(z)
         z * sigma + mu
+    fd <- function(x)
+        dnorm(x, mu, sigma)
+    fp <- function(q)
+        pnorm(q, mu, sigma)
+    fq <- function(p)
+        qnorm(p, mu, sigma)
+    fr <- function(n)
+        rnorm(n, mu, sigma)
 
     # return
     list(normalize = normalize,
          denormalize = denormalize,
          par = c(mu, sigma),
+         fd = fd,
+         fp = fp,
+         fq = fq,
+         fr = fr,
          x = x,
          z = normalize(x))
 }
@@ -162,7 +174,7 @@ zjohnson <- function(x) {
     gdxl <- c(gamma = 0, delta = 1, xi = 0, lambda = 1)
     opt <- optim(gdxl, function(gdxl) {
         p <- pjohnson(x, gdxl[1], gdxl[2], gdxl[3], gdxl[4])
-        qqtad(p)
+        qqtad(p[order(x)])
     })
 
     # parameterization (K-S test)
@@ -170,7 +182,7 @@ zjohnson <- function(x) {
     opt <- optim(gdxl, function(gdxl) {
         p <- pjohnson(x, gdxl[1], gdxl[2], gdxl[3], gdxl[4])
         ks <- suppressWarnings(ks.test(qnorm(p), "pnorm"))
-        ks$statistic
+        -ks$p.value
     })
 
     # binding
@@ -179,11 +191,23 @@ zjohnson <- function(x) {
         qnorm(pjohnson(q, gdxl[1], gdxl[2], gdxl[3], gdxl[4]))
     denormalize <- function(z)
         qjohnson(pnorm(z), gdxl[1], gdxl[2], gdxl[3], gdxl[4])
+    fd <- function(x)
+        djohnson(x, gdxl[1], gdxl[2], gdxl[3], gdxl[4])
+    fp <- function(q)
+        pjohnson(q, gdxl[1], gdxl[2], gdxl[3], gdxl[4])
+    fq <- function(p)
+        qjohnson(p, gdxl[1], gdxl[2], gdxl[3], gdxl[4])
+    fr <- function(n)
+        rjohnson(n, gdxl[1], gdxl[2], gdxl[3], gdxl[4])
 
     # return
     list(normalize = normalize,
          denormalize = denormalize,
          par = gdxl,
+         fd = fd,
+         fp = fp,
+         fq = fq,
+         fr = fr,
          x = x,
          z = normalize(x))
 }

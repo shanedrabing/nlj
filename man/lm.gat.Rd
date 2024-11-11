@@ -2,7 +2,7 @@
 % Please edit documentation in R/nlj.r
 \name{lm.gat}
 \alias{lm.gat}
-\title{Generalized Asinh Transformation (GAT) Model}
+\title{Generalized Asinh Transformation Model (GATM)}
 \usage{
 lm.gat(formula, data = NULL, iterations = 1, penalty = 1e-09, verbose = FALSE)
 }

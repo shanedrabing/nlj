@@ -7,7 +7,7 @@
 qqtad(p)
 }
 \arguments{
-\item{p}{A numeric vector representing probabilities.}
+\item{p}{A numeric vector representing sorted probabilities.}
 }
 \value{
 A single numeric value representing the total absolute deviation.

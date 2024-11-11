@@ -13,7 +13,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-# nlj
+# NLJ
 
 <!-- badges: start -->
 <!-- badges: end -->
@@ -53,7 +53,7 @@ qqtad(p)
 
 ### Generalized Inverse Hyperbolic Sine Transformation
 
-The `gasinh` and `inverse.gasinh` functions apply and reverse the generalized
+The `gasinh` and `gsinh` functions apply and reverse the generalized
 inverse hyperbolic sine transformation:
 
 ```{r example-gasinh}
@@ -64,7 +64,7 @@ transformed <- gasinh(x)
 transformed
 
 # Reverse the transformation
-inverse_transformed <- inverse.gasinh(transformed)
+inverse_transformed <- gsinh(transformed)
 inverse_transformed
 ```
 
@@ -133,22 +133,30 @@ denormalized_johnson <- johnson_norm$denormalize(johnson_norm$z)
 denormalized_johnson
 ```
 
-### Generalized Asinh Transformation Model (GATM)
+### Density Estimation Comparison
 
-The `lm.gat` function fits a linear model using the generalized asinh
-transformation. Here’s an example of its usage:
+This example compares the density estimation of the original data (`airquality$Wind`) with the densities after applying Z-score normalization and Johnson SU normalization.
 
-```{r example-lm.gat}
-# Generate some example data
-set.seed(123)
-example_data <- data.frame(
-  x = rnorm(100),
-  y = 2 * rnorm(100) + 3
-)
+```{r example-density-comparison}
+# Example data: Wind speed
+x <- sort(airquality$Wind)
+d <- density(x)
 
-# Fit the GATM model
-model <- lm.gat(y ~ x, data = example_data, iterations = 10, penalty = 1e-6, verbose = TRUE)
+# Apply Z-score normalization and Johnson SU normalization
+zn <- znorm(x)
+zj <- zjohnson(x)
 
-# View fitted model parameters
-model$par
+# Extract the density estimates
+xd <- d$x
+yd <- d$y
+yn <- zn$fd(xd)
+yj <- zj$fd(xd)
+
+# Plot the density comparison
+plot(range(xd), range(c(yd, yn, yj)), type = "n",
+     main = "Wind Speed Density Estimation",
+     xlab = "Wind Speed", ylab = "Density")
+lines(xd, yd, col = "black")  # Original density
+lines(xd, yn, col = "red")    # Z-score normalized density
+lines(xd, yj, col = "blue")   # Johnson SU normalized density
 ```

@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# nlj
+# NLJ
 
 <!-- badges: start -->
 <!-- badges: end -->
@@ -43,8 +43,8 @@ qqtad(p)
 
 ### Generalized Inverse Hyperbolic Sine Transformation
 
-The `gasinh` and `inverse.gasinh` functions apply and reverse the
-generalized inverse hyperbolic sine transformation:
+The `gasinh` and `gsinh` functions apply and reverse the generalized
+inverse hyperbolic sine transformation:
 
 ``` r
 x <- c(-1, 0, 1, 2, 3)
@@ -55,7 +55,7 @@ transformed
 #> [1] -0.8813736  0.0000000  0.8813736  1.4436355  1.8184465
 
 # Reverse the transformation
-inverse_transformed <- inverse.gasinh(transformed)
+inverse_transformed <- gsinh(transformed)
 inverse_transformed
 #> [1] -1  0  1  2  3
 ```
@@ -95,7 +95,7 @@ qjohnson(0.5, gamma = 0, delta = 1, xi = 0, lambda = 1)
 ``` r
 # Generate 5 random deviates
 rjohnson(5, gamma = 0, delta = 1, xi = 0, lambda = 1)
-#> [1] -0.5492611  0.7361620  0.3126695 -0.4571788  0.7614111
+#> [1]  0.5726137  0.5736305  0.3310930 -1.2685894  1.1122733
 ```
 
 ### Z-Score Normalization
@@ -127,7 +127,7 @@ distribution:
 # Normalize using Johnson SU distribution
 johnson_norm <- zjohnson(x)
 johnson_norm$z  # Normalized values
-#> [1] -1.214545721 -0.592801987  0.009346948  0.592802011  1.158435547
+#> [1] -1.214548857 -0.592800127  0.009353697  0.592813535  1.158451731
 
 # Reverse the normalization
 denormalized_johnson <- johnson_norm$denormalize(johnson_norm$z)
@@ -135,33 +135,34 @@ denormalized_johnson
 #> [1] 1 2 3 4 5
 ```
 
-### Generalized Asinh Transformation Model (GATM)
+### Density Estimation Comparison
 
-The `lm.gat` function fits a linear model using the generalized asinh
-transformation. Here’s an example of its usage:
+This example compares the density estimation of the original data
+(`airquality$Wind`) with the densities after applying Z-score
+normalization and Johnson SU normalization.
 
 ``` r
-# Generate some example data
-set.seed(123)
-example_data <- data.frame(
-  x = rnorm(100),
-  y = 2 * rnorm(100) + 3
-)
+# Example data: Wind speed
+x <- sort(airquality$Wind)
+d <- density(x)
 
-# Fit the GATM model
-model <- lm.gat(y ~ x, data = example_data, iterations = 10, penalty = 1e-6, verbose = TRUE)
-#> Loss: 1.341005e-02
-#> Loss: 1.319487e-02
-#> Loss: 1.31893e-02
-#> Loss: 1.31893e-02
-#> Loss: 1.31893e-02
-#> Loss: 1.31893e-02
-#> Loss: 1.31893e-02
-#> Loss: 1.31893e-02
-#> Loss: 1.31893e-02
-#> Loss: 1.31893e-02
+# Apply Z-score normalization and Johnson SU normalization
+zn <- znorm(x)
+zj <- zjohnson(x)
 
-# View fitted model parameters
-model$par
-#> [1] -1.332197e+02  9.233658e+01  1.136046e+00 -1.027282e-29
+# Extract the density estimates
+xd <- d$x
+yd <- d$y
+yn <- zn$fd(xd)
+yj <- zj$fd(xd)
+
+# Plot the density comparison
+plot(range(xd), range(c(yd, yn, yj)), type = "n",
+     main = "Wind Speed Density Estimation",
+     xlab = "Wind Speed", ylab = "Density")
+lines(xd, yd, col = "black")  # Original density
+lines(xd, yn, col = "red")    # Z-score normalized density
+lines(xd, yj, col = "blue")   # Johnson SU normalized density
 ```
+
+<img src="man/figures/README-pressure-1.pngexample-density-comparison-1.png" width="100%" />

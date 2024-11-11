@@ -2,7 +2,7 @@
 
 export(djohnson)
 export(gasinh)
-export(inverse.gasinh)
+export(gsinh)
 export(lm.gat)
 export(pjohnson)
 export(qjohnson)
