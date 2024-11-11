@@ -2,20 +2,20 @@
 % Please edit documentation in R/nlj.r
 \name{gsinh}
 \alias{gsinh}
-\title{Generalized Hyperbolic Sine}
+\title{Generalized Hyperbolic Sine Transformation}
 \usage{
 gsinh(x, xi = 0, lambda = 1)
 }
 \arguments{
 \item{x}{A numeric vector to transform back.}
 
-\item{xi}{Numeric, location parameter.}
+\item{xi}{Numeric, location parameter (default = 0).}
 
-\item{lambda}{Numeric, scale parameter.}
+\item{lambda}{Numeric, scale parameter (default = 1).}
 }
 \value{
 A numeric vector of back-transformed values.
 }
 \description{
-Computes the the generalized hyperbolic sine transformation.
+Computes the generalized hyperbolic sine transformation (inverse of the asinh transformation).
 }

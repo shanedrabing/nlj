@@ -6,7 +6,7 @@
 #' Calculates the total absolute deviation from a theoretical cumulative distribution function (CDF).
 #'
 #' @param p A numeric vector representing sorted probabilities.
-#' @return A single numeric value representing the total absolute deviation.
+#' @return A single numeric value representing the total absolute deviation from the theoretical CDF.
 #' @export
 qqtad <- function(p) {
     sum(abs(p - seq(0, 1, length.out = length(p))))
@@ -17,21 +17,21 @@ qqtad <- function(p) {
 #' Computes the generalized inverse hyperbolic sine transformation.
 #'
 #' @param x A numeric vector to transform.
-#' @param xi Numeric, location parameter.
-#' @param lambda Numeric, scale parameter.
+#' @param xi Numeric, location parameter (default = 0).
+#' @param lambda Numeric, scale parameter (default = 1).
 #' @return A numeric vector of transformed values.
 #' @export
 gasinh <- function(x, xi = 0, lambda = 1) {
     asinh((x - xi) / lambda)
 }
 
-#' Generalized Hyperbolic Sine
+#' Generalized Hyperbolic Sine Transformation
 #'
-#' Computes the the generalized hyperbolic sine transformation.
+#' Computes the generalized hyperbolic sine transformation (inverse of the asinh transformation).
 #'
 #' @param x A numeric vector to transform back.
-#' @param xi Numeric, location parameter.
-#' @param lambda Numeric, scale parameter.
+#' @param xi Numeric, location parameter (default = 0).
+#' @param lambda Numeric, scale parameter (default = 1).
 #' @return A numeric vector of back-transformed values.
 #' @export
 gsinh <- function(x, xi = 0, lambda = 1) {
@@ -47,11 +47,11 @@ gsinh <- function(x, xi = 0, lambda = 1) {
 #' Computes the density of the Johnson SU distribution.
 #'
 #' @param x A numeric vector of values at which to evaluate the density.
-#' @param gamma Numeric, shape parameter.
-#' @param delta Numeric, shape parameter.
-#' @param xi Numeric, location parameter.
-#' @param lambda Numeric, scale parameter.
-#' @return A numeric vector of density values.
+#' @param gamma Numeric, shape parameter (default = 0).
+#' @param delta Numeric, shape parameter (default = 1).
+#' @param xi Numeric, location parameter (default = 0).
+#' @param lambda Numeric, scale parameter (default = 1).
+#' @return A numeric vector of density values for the Johnson SU distribution.
 #' @export
 djohnson <- function(x, gamma = 0, delta = 1, xi = 0, lambda = 1) {
     z <- (x - xi) / lambda
@@ -66,11 +66,11 @@ djohnson <- function(x, gamma = 0, delta = 1, xi = 0, lambda = 1) {
 #' Computes the cumulative distribution function of the Johnson SU distribution.
 #'
 #' @param q A numeric vector of quantiles.
-#' @param gamma Numeric, shape parameter.
-#' @param delta Numeric, shape parameter.
-#' @param xi Numeric, location parameter.
-#' @param lambda Numeric, scale parameter.
-#' @return A numeric vector of cumulative probabilities.
+#' @param gamma Numeric, shape parameter (default = 0).
+#' @param delta Numeric, shape parameter (default = 1).
+#' @param xi Numeric, location parameter (default = 0).
+#' @param lambda Numeric, scale parameter (default = 1).
+#' @return A numeric vector of cumulative probabilities for the Johnson SU distribution.
 #' @export
 pjohnson <- function(q, gamma = 0, delta = 1, xi = 0, lambda = 1) {
     stats::pnorm(gamma + delta * asinh((q - xi) / lambda))
@@ -81,11 +81,11 @@ pjohnson <- function(q, gamma = 0, delta = 1, xi = 0, lambda = 1) {
 #' Computes the inverse cumulative distribution (quantile function) of the Johnson SU distribution.
 #'
 #' @param p A numeric vector of probabilities.
-#' @param gamma Numeric, shape parameter.
-#' @param delta Numeric, shape parameter.
-#' @param xi Numeric, location parameter.
-#' @param lambda Numeric, scale parameter.
-#' @return A numeric vector of quantiles.
+#' @param gamma Numeric, shape parameter (default = 0).
+#' @param delta Numeric, shape parameter (default = 1).
+#' @param xi Numeric, location parameter (default = 0).
+#' @param lambda Numeric, scale parameter (default = 1).
+#' @return A numeric vector of quantiles for the Johnson SU distribution.
 #' @export
 qjohnson <- function(p, gamma = 0, delta = 1, xi = 0, lambda = 1) {
     xi + lambda * sinh((stats::qnorm(p) - gamma) / delta)
@@ -95,12 +95,12 @@ qjohnson <- function(p, gamma = 0, delta = 1, xi = 0, lambda = 1) {
 #'
 #' Generates random deviates from the Johnson SU distribution.
 #'
-#' @param n Number of random values to generate.
-#' @param gamma Numeric, shape parameter.
-#' @param delta Numeric, shape parameter.
-#' @param xi Numeric, location parameter.
-#' @param lambda Numeric, scale parameter.
-#' @return A numeric vector of random deviates.
+#' @param n Integer, the number of random values to generate.
+#' @param gamma Numeric, shape parameter (default = 0).
+#' @param delta Numeric, shape parameter (default = 1).
+#' @param xi Numeric, location parameter (default = 0).
+#' @param lambda Numeric, scale parameter (default = 1).
+#' @return A numeric vector of random deviates from the Johnson SU distribution.
 #' @export
 rjohnson <- function(n, gamma = 0, delta = 1, xi = 0, lambda = 1) {
     xi + lambda * sinh((stats::qnorm(stats::runif(n)) - gamma) / delta)
@@ -120,30 +120,25 @@ rjohnson <- function(n, gamma = 0, delta = 1, xi = 0, lambda = 1) {
 #'     \item{normalize}{A function that applies the normalization to a new vector.}
 #'     \item{denormalize}{A function that reverses the normalization.}
 #'     \item{par}{A numeric vector of parameters (mean and standard deviation).}
+#'     \item{fd}{A function to compute the density under Z-normalization.}
+#'     \item{fp}{A function to compute cumulative probability under Z-normalization.}
+#'     \item{fq}{A function to compute quantiles under Z-normalization.}
+#'     \item{fr}{A function to generate random deviates under Z-normalization.}
 #'     \item{x}{The original input data.}
 #'     \item{z}{The normalized data.}
 #'   }
 #' @export
 znorm <- function(x) {
-    # parameterization
     mu <- mean(x)
     sigma <- stats::sd(x)
 
-    # binding
-    normalize <- function(q)
-        (q - mu) / sigma
-    denormalize <- function(z)
-        z * sigma + mu
-    fd <- function(x)
-        stats::dnorm(x, mu, sigma)
-    fp <- function(q)
-        stats::pnorm(q, mu, sigma)
-    fq <- function(p)
-        stats::qnorm(p, mu, sigma)
-    fr <- function(n)
-        stats::rnorm(n, mu, sigma)
+    normalize <- function(q) (q - mu) / sigma
+    denormalize <- function(z) z * sigma + mu
+    fd <- function(x) stats::dnorm(x, mu, sigma)
+    fp <- function(q) stats::pnorm(q, mu, sigma)
+    fq <- function(p) stats::qnorm(p, mu, sigma)
+    fr <- function(n) stats::rnorm(n, mu, sigma)
 
-    # return
     list(normalize = normalize,
          denormalize = denormalize,
          par = c(mu, sigma),
@@ -165,19 +160,21 @@ znorm <- function(x) {
 #'     \item{normalize}{A function that applies the Johnson SU normalization.}
 #'     \item{denormalize}{A function that reverses the normalization.}
 #'     \item{par}{A numeric vector of optimized Johnson SU parameters.}
+#'     \item{fd}{A function to compute density under Johnson SU normalization.}
+#'     \item{fp}{A function to compute cumulative probability under Johnson SU normalization.}
+#'     \item{fq}{A function to compute quantiles under Johnson SU normalization.}
+#'     \item{fr}{A function to generate random deviates under Johnson SU normalization.}
 #'     \item{x}{The original input data.}
 #'     \item{z}{The normalized data.}
 #'   }
 #' @export
 zjohnson <- function(x) {
-    # parameterization (Q-Q)
     gdxl <- c(gamma = 0, delta = 1, xi = 0, lambda = 1)
     opt <- stats::optim(gdxl, function(gdxl) {
         p <- pjohnson(x, gdxl[1], gdxl[2], gdxl[3], gdxl[4])
         qqtad(p[order(x)])
     })
 
-    # parameterization (K-S test)
     gdxl <- opt$par
     opt <- stats::optim(gdxl, function(gdxl) {
         p <- pjohnson(x, gdxl[1], gdxl[2], gdxl[3], gdxl[4])
@@ -185,22 +182,16 @@ zjohnson <- function(x) {
         -ks$p.value
     })
 
-    # binding
     gdxl <- opt$par
     normalize <- function(q)
         stats::qnorm(pjohnson(q, gdxl[1], gdxl[2], gdxl[3], gdxl[4]))
     denormalize <- function(z)
         qjohnson(stats::pnorm(z), gdxl[1], gdxl[2], gdxl[3], gdxl[4])
-    fd <- function(x)
-        djohnson(x, gdxl[1], gdxl[2], gdxl[3], gdxl[4])
-    fp <- function(q)
-        pjohnson(q, gdxl[1], gdxl[2], gdxl[3], gdxl[4])
-    fq <- function(p)
-        qjohnson(p, gdxl[1], gdxl[2], gdxl[3], gdxl[4])
-    fr <- function(n)
-        rjohnson(n, gdxl[1], gdxl[2], gdxl[3], gdxl[4])
+    fd <- function(x) djohnson(x, gdxl[1], gdxl[2], gdxl[3], gdxl[4])
+    fp <- function(q) pjohnson(q, gdxl[1], gdxl[2], gdxl[3], gdxl[4])
+    fq <- function(p) qjohnson(p, gdxl[1], gdxl[2], gdxl[3], gdxl[4])
+    fr <- function(n) rjohnson(n, gdxl[1], gdxl[2], gdxl[3], gdxl[4])
 
-    # return
     list(normalize = normalize,
          denormalize = denormalize,
          par = gdxl,
@@ -220,42 +211,38 @@ zjohnson <- function(x) {
 #'
 #' Fits a linear model using the generalized asinh transformation.
 #'
-#' @param formula An object of class `formula`.
-#' @param data An optional data frame.
-#' @param iterations Number of iterations for optimization.
-#' @param penalty Penalty for regularization.
-#' @param verbose Logical, if TRUE, prints progress.
+#' @param formula An object of class `formula` for the model.
+#' @param data An optional data frame for variable data.
+#' @param iterations Integer, number of iterations for optimization (default = 1).
+#' @param penalty Numeric, regularization penalty (default = 1e-9).
+#' @param verbose Logical, if TRUE, prints optimization progress (default = FALSE).
 #' @return A list containing:
 #'   \describe{
-#'     \item{predict}{A function to predict new data.}
-#'     \item{detransform}{A function to reverse the transformation.}
-#'     \item{par}{Optimized transformation parameters.}
+#'     \item{predict}{A function to predict new data based on the fitted model.}
+#'     \item{detransform}{A function to reverse the generalized asinh transformation.}
+#'     \item{par}{Optimized transformation parameters for each variable.}
 #'     \item{fit}{Fitted linear model object.}
-#'     \item{opt}{Optimization object.}
-#'     \item{df.sub}{Subset of data frame used in modeling.}
-#'     \item{df.mut}{Transformed data frame.}
-#'     \item{z}{Detransformed fitted values.}
+#'     \item{opt}{Optimization result object.}
+#'     \item{df.sub}{Subset of data used for modeling.}
+#'     \item{df.mut}{Transformed data frame used in modeling.}
+#'     \item{z}{Detransformed fitted values of the model.}
 #'   }
 #' @export
 lm.gat <- function(formula, data = NULL,
                    iterations = 1, penalty = 1e-9,
                    verbose = FALSE) {
 
-    # helper
     as.df <- as.data.frame
     use.gasinh <- function(i, df, prm) {
         gasinh(df[, i], prm[2 * (i - 1) + 1], prm[2 * (i - 1) + 2])
     }
 
-    # subset
     env <- if (is.null(data)) environment(formula) else as.environment(data)
     sub <- as.df(sapply(all.vars(formula), get, envir = env))
 
-    # initialization
     n <- ncol(sub)
     prm <- rep(c(0, 1), n)
 
-    # binding
     evaluate <- function(prm) {
         mut <- stats::setNames(as.df(sapply(1:n, use.gasinh, sub, prm)), names(sub))
 
@@ -269,7 +256,6 @@ lm.gat <- function(formula, data = NULL,
         })
     }
 
-    # optimization
     for (k in 1:iterations) {
         opt <- stats::optim(prm, evaluate)
         prm <- opt$par
@@ -278,21 +264,17 @@ lm.gat <- function(formula, data = NULL,
         }
     }
 
-    # evaluation
     prm <- opt$par
     mut <- stats::setNames(as.df(sapply(1:n, use.gasinh, sub, prm)), names(sub))
     m <- stats::lm(formula, mut)
 
-    # binding
-    detransform <- function(y)
-        gsinh(y, prm[1], prm[2])
+    detransform <- function(y) gsinh(y, prm[1], prm[2])
     predict <- function(data) {
         rhs <- all.names(formula)[-(1:3)]
         sub <- data[, rhs]
         predict(m, sub)
     }
 
-    # return
     list(predict = predict,
          detransform = detransform,
          par = prm,

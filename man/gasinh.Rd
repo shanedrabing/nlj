@@ -9,9 +9,9 @@ gasinh(x, xi = 0, lambda = 1)
 \arguments{
 \item{x}{A numeric vector to transform.}
 
-\item{xi}{Numeric, location parameter.}
+\item{xi}{Numeric, location parameter (default = 0).}
 
-\item{lambda}{Numeric, scale parameter.}
+\item{lambda}{Numeric, scale parameter (default = 1).}
 }
 \value{
 A numeric vector of transformed values.

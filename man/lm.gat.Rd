@@ -7,27 +7,27 @@
 lm.gat(formula, data = NULL, iterations = 1, penalty = 1e-09, verbose = FALSE)
 }
 \arguments{
-\item{formula}{An object of class \code{formula}.}
+\item{formula}{An object of class \code{formula} for the model.}
 
-\item{data}{An optional data frame.}
+\item{data}{An optional data frame for variable data.}
 
-\item{iterations}{Number of iterations for optimization.}
+\item{iterations}{Integer, number of iterations for optimization (default = 1).}
 
-\item{penalty}{Penalty for regularization.}
+\item{penalty}{Numeric, regularization penalty (default = 1e-9).}
 
-\item{verbose}{Logical, if TRUE, prints progress.}
+\item{verbose}{Logical, if TRUE, prints optimization progress (default = FALSE).}
 }
 \value{
 A list containing:
 \describe{
-\item{predict}{A function to predict new data.}
-\item{detransform}{A function to reverse the transformation.}
-\item{par}{Optimized transformation parameters.}
+\item{predict}{A function to predict new data based on the fitted model.}
+\item{detransform}{A function to reverse the generalized asinh transformation.}
+\item{par}{Optimized transformation parameters for each variable.}
 \item{fit}{Fitted linear model object.}
-\item{opt}{Optimization object.}
-\item{df.sub}{Subset of data frame used in modeling.}
-\item{df.mut}{Transformed data frame.}
-\item{z}{Detransformed fitted values.}
+\item{opt}{Optimization result object.}
+\item{df.sub}{Subset of data used for modeling.}
+\item{df.mut}{Transformed data frame used in modeling.}
+\item{z}{Detransformed fitted values of the model.}
 }
 }
 \description{

@@ -9,16 +9,16 @@ djohnson(x, gamma = 0, delta = 1, xi = 0, lambda = 1)
 \arguments{
 \item{x}{A numeric vector of values at which to evaluate the density.}
 
-\item{gamma}{Numeric, shape parameter.}
+\item{gamma}{Numeric, shape parameter (default = 0).}
 
-\item{delta}{Numeric, shape parameter.}
+\item{delta}{Numeric, shape parameter (default = 1).}
 
-\item{xi}{Numeric, location parameter.}
+\item{xi}{Numeric, location parameter (default = 0).}
 
-\item{lambda}{Numeric, scale parameter.}
+\item{lambda}{Numeric, scale parameter (default = 1).}
 }
 \value{
-A numeric vector of density values.
+A numeric vector of density values for the Johnson SU distribution.
 }
 \description{
 Computes the density of the Johnson SU distribution.

@@ -15,6 +15,10 @@ A list containing:
 \item{normalize}{A function that applies the Johnson SU normalization.}
 \item{denormalize}{A function that reverses the normalization.}
 \item{par}{A numeric vector of optimized Johnson SU parameters.}
+\item{fd}{A function to compute density under Johnson SU normalization.}
+\item{fp}{A function to compute cumulative probability under Johnson SU normalization.}
+\item{fq}{A function to compute quantiles under Johnson SU normalization.}
+\item{fr}{A function to generate random deviates under Johnson SU normalization.}
 \item{x}{The original input data.}
 \item{z}{The normalized data.}
 }

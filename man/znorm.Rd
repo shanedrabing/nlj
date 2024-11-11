@@ -15,6 +15,10 @@ A list containing:
 \item{normalize}{A function that applies the normalization to a new vector.}
 \item{denormalize}{A function that reverses the normalization.}
 \item{par}{A numeric vector of parameters (mean and standard deviation).}
+\item{fd}{A function to compute the density under Z-normalization.}
+\item{fp}{A function to compute cumulative probability under Z-normalization.}
+\item{fq}{A function to compute quantiles under Z-normalization.}
+\item{fr}{A function to generate random deviates under Z-normalization.}
 \item{x}{The original input data.}
 \item{z}{The normalized data.}
 }

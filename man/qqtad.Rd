@@ -10,7 +10,7 @@ qqtad(p)
 \item{p}{A numeric vector representing sorted probabilities.}
 }
 \value{
-A single numeric value representing the total absolute deviation.
+A single numeric value representing the total absolute deviation from the theoretical CDF.
 }
 \description{
 Calculates the total absolute deviation from a theoretical cumulative distribution function (CDF).

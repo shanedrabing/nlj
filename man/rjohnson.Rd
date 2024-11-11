@@ -7,18 +7,18 @@
 rjohnson(n, gamma = 0, delta = 1, xi = 0, lambda = 1)
 }
 \arguments{
-\item{n}{Number of random values to generate.}
+\item{n}{Integer, the number of random values to generate.}
 
-\item{gamma}{Numeric, shape parameter.}
+\item{gamma}{Numeric, shape parameter (default = 0).}
 
-\item{delta}{Numeric, shape parameter.}
+\item{delta}{Numeric, shape parameter (default = 1).}
 
-\item{xi}{Numeric, location parameter.}
+\item{xi}{Numeric, location parameter (default = 0).}
 
-\item{lambda}{Numeric, scale parameter.}
+\item{lambda}{Numeric, scale parameter (default = 1).}
 }
 \value{
-A numeric vector of random deviates.
+A numeric vector of random deviates from the Johnson SU distribution.
 }
 \description{
 Generates random deviates from the Johnson SU distribution.
