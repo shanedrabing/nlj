@@ -8,7 +8,10 @@ output: github_document
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
+  dpi = 300,
   fig.path = "man/figures/",
+  fig.width = 9,
+  fig.height = 6,
   out.width = "100%"
 )
 ```
@@ -16,6 +19,12 @@ knitr::opts_chunk$set(
 # NLJ
 
 <!-- badges: start -->
+<p align="center">
+  <a href="https://github.com/shanedrabing/nlj/pulse" alt="Activity">
+      <img src="https://img.shields.io/github/commit-activity/m/shanedrabing/nlj" /></a>
+  <a href="https://github.com/shanedrabing/nlj/discussions" alt="Discussions">
+      <img src="https://img.shields.io/github/discussions/shanedrabing/nlj" /></a>
+</p>
 <!-- badges: end -->
 
 The goal of nlj is to provide functions for statistical transformations,
@@ -137,7 +146,7 @@ denormalized_johnson
 
 This example compares the density estimation of the original data (`airquality$Wind`) with the densities after applying Z-score normalization and Johnson SU normalization.
 
-```{r density-estimation, dpi=300, fig.width=9, fig.height=6}
+```{r density-estimation}
 # Example data: Wind speed
 x <- sort(airquality$Wind)
 d <- density(x)

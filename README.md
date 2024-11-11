@@ -4,6 +4,12 @@
 # NLJ
 
 <!-- badges: start -->
+<p align="center">
+<a href="https://github.com/shanedrabing/nlj/pulse" alt="Activity">
+<img src="https://img.shields.io/github/commit-activity/m/shanedrabing/nlj" /></a>
+<a href="https://github.com/shanedrabing/nlj/discussions" alt="Discussions">
+<img src="https://img.shields.io/github/discussions/shanedrabing/nlj" /></a>
+</p>
 <!-- badges: end -->
 
 The goal of nlj is to provide functions for statistical transformations,
@@ -95,7 +101,7 @@ qjohnson(0.5, gamma = 0, delta = 1, xi = 0, lambda = 1)
 ``` r
 # Generate 5 random deviates
 rjohnson(5, gamma = 0, delta = 1, xi = 0, lambda = 1)
-#> [1]  0.4982115 -0.1423845  1.6312664 -0.7317720 -1.5366236
+#> [1] -1.7232513  0.6292054  1.0705189 -2.1114994  0.1391506
 ```
 
 ### Z-Score Normalization
