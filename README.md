@@ -95,7 +95,7 @@ qjohnson(0.5, gamma = 0, delta = 1, xi = 0, lambda = 1)
 ``` r
 # Generate 5 random deviates
 rjohnson(5, gamma = 0, delta = 1, xi = 0, lambda = 1)
-#> [1]  2.3366987  0.5384061  0.5990896 -0.4338285 -0.6242223
+#> [1]  0.4982115 -0.1423845  1.6312664 -0.7317720 -1.5366236
 ```
 
 ### Z-Score Normalization
@@ -163,9 +163,10 @@ plot(range(xd), range(c(yd, yn, yj)), type = "n",
 lines(xd, yd, col = "black")  # Original density
 lines(xd, yn, col = "red")    # Z-score normalized density
 lines(xd, yj, col = "blue")   # Johnson SU normalized density
-legend(min(xd), max(yd),
+legend(min(xd), max(c(yd, yn, yj)),
        c("Kernel estimation", "Normal", "Johnson-SU"),
-       col = c("black", "red", "blue"))
+       col = c("black", "red", "blue"),
+       lwd = 1, bg = "white")
 ```
 
-<img src="man/figures/example-density-comparison-1.png" width="100%" />
+<img src="man/figures/density-estimation-1.png" width="100%" />
