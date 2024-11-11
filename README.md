@@ -95,7 +95,7 @@ qjohnson(0.5, gamma = 0, delta = 1, xi = 0, lambda = 1)
 ``` r
 # Generate 5 random deviates
 rjohnson(5, gamma = 0, delta = 1, xi = 0, lambda = 1)
-#> [1]  2.5382549 -0.7883415  1.2141195  0.2700701 -3.0014050
+#> [1] -0.62608462  2.07056669  0.09987087  0.27877611 -0.67019490
 ```
 
 ### Z-Score Normalization
@@ -165,4 +165,4 @@ lines(xd, yn, col = "red")    # Z-score normalized density
 lines(xd, yj, col = "blue")   # Johnson SU normalized density
 ```
 
-<img src="man/figures/README-pressure-1.pngexample-density-comparison-1.png" width="100%" />
+<img src="man/figures/example-density-comparison-1.png" width="100%" />
