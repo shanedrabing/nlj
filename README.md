@@ -95,7 +95,7 @@ qjohnson(0.5, gamma = 0, delta = 1, xi = 0, lambda = 1)
 ``` r
 # Generate 5 random deviates
 rjohnson(5, gamma = 0, delta = 1, xi = 0, lambda = 1)
-#> [1]  0.5726137  0.5736305  0.3310930 -1.2685894  1.1122733
+#> [1]  2.5382549 -0.7883415  1.2141195  0.2700701 -3.0014050
 ```
 
 ### Z-Score Normalization

@@ -137,7 +137,7 @@ denormalized_johnson
 
 This example compares the density estimation of the original data (`airquality$Wind`) with the densities after applying Z-score normalization and Johnson SU normalization.
 
-```{r example-density-comparison}
+```{r example-density-comparison, dpi=300, fig.width=9, fig.height=6}
 # Example data: Wind speed
 x <- sort(airquality$Wind)
 d <- density(x)
