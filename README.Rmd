@@ -159,4 +159,7 @@ plot(range(xd), range(c(yd, yn, yj)), type = "n",
 lines(xd, yd, col = "black")  # Original density
 lines(xd, yn, col = "red")    # Z-score normalized density
 lines(xd, yj, col = "blue")   # Johnson SU normalized density
+legend(min(xd), max(yd),
+       c("Kernel estimation", "Normal", "Johnson-SU"),
+       col = c("black", "red", "blue"))
 ```

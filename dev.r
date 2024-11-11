@@ -60,6 +60,9 @@ devtools::load_all()
     lines(xd, yd, col = "black")
     lines(xd, yn, col = "red")
     lines(xd, yj, col = "blue")
+    legend(min(xd), max(yd),
+           c("Kernel estimation", "Normal", "Johnson-SU"),
+           col = c("black", "red", "blue"))
 
     dev.off()
 }
