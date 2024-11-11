@@ -22,9 +22,9 @@ pak::pak("shanedrabing/nlj")
 
 Below are examples showcasing some key functions in the `nlj` package.
 
-### Johnson SU Distribution Functions
+### Johnson-SU Distribution Functions
 
-The Johnson SU distribution functions `djohnson`, `pjohnson`,
+The Johnson-SU distribution functions `djohnson`, `pjohnson`,
 `qjohnson`, and `rjohnson` provide density, cumulative distribution,
 quantile, and random variate generation capabilities.
 
@@ -57,21 +57,21 @@ nlj::qjohnson(0.5, gamma = 0, delta = 1, xi = 0, lambda = 1)
 ``` r
 # Generate 5 random deviates
 nlj::rjohnson(5, gamma = 0, delta = 1, xi = 0, lambda = 1)
-#> [1]  0.4252297  1.7146467  0.2213620  0.3313443 -0.8268423
+#> [1]  0.8934203 -1.8059235 -6.4829776  0.9324877  1.7761272
 ```
 
 ### Density Estimation Comparison
 
 This example compares the density estimation of the original data
 (`airquality$Wind`) with the densities after applying Z-score
-normalization and Johnson SU normalization.
+normalization and Johnson-SU normalization.
 
 ``` r
 # Example data: Wind speed
 x <- sort(airquality$Wind)
 d <- density(x)
 
-# Apply Z-score normalization and Johnson SU normalization
+# Apply Z-score normalization and Johnson-SU normalization
 zn <- nlj::znorm(x)
 zj <- nlj::zjohnson(x)
 
@@ -87,7 +87,7 @@ plot(range(xd), range(c(yd, yn, yj)), type = "n",
      xlab = "Wind Speed", ylab = "Density")
 lines(xd, yd, col = "black")  # Original density
 lines(xd, yn, col = "red")    # Z-score normalized density
-lines(xd, yj, col = "blue")   # Johnson SU normalized density
+lines(xd, yj, col = "blue")   # Johnson-SU normalized density
 legend(min(xd), max(c(yd, yn, yj)),
        c("Kernel estimation", "Normal", "Johnson-SU"),
        col = c("black", "red", "blue"),

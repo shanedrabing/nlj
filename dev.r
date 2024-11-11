@@ -13,9 +13,9 @@ setwd("/Users/Shane/Code/packaging/nlj")
 # usethis::use_testthat()
 
 # 3) Documentation
-devtools::document()
-devtools::build_readme()
-devtools::build_vignettes()
+# devtools::document()
+# devtools::build_readme()
+# devtools::build_vignettes()
 
 # 4) check code
 # devtools::check()
