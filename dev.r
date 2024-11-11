@@ -18,14 +18,14 @@ devtools::build_readme()
 devtools::build_vignettes()
 
 # 4) check code
-devtools::check()
+# devtools::check()
 # devtools::check_man()
 # devtools::spell_check()
 # devtools::run_examples()
 
 # test code
-devtools::unload()
-devtools::load_all()
+# devtools::unload()
+# devtools::load_all()
 # devtools::test()
 
 # build
@@ -37,7 +37,7 @@ devtools::load_all()
 
 {
     # reset    
-    devtools::unload()
+    tryCatch(devtools::unload(), error = function(e) {})
     devtools::load_all()
 
     # plot
