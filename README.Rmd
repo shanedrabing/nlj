@@ -4,14 +4,6 @@ output: github_document
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-<style>
-img {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-}
-</style>
-
 ```{r, include = FALSE}
 set.seed(420)
 knitr::opts_chunk$set(
@@ -21,8 +13,7 @@ knitr::opts_chunk$set(
   fig.path = "man/figures/",
   fig.width = 9,
   fig.height = 6,
-  fig.align = "center",
-  out.width = "67%"
+  out.width = "70%"
 )
 ```
 
