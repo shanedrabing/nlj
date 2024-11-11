@@ -54,7 +54,7 @@ plot(x, d, type = "l",
      xlab = "X", ylab = "Density")
 ```
 
-<img src="man/figures/djohnson-1.png" width="67%" style="display: block; margin: auto;" />
+<img src="man/figures/djohnson-1.png" width="67%" style="display:block;float:none;margin-left:auto;margin-right:auto;width:60%" />
 
 #### Cumulative Distribution
 
