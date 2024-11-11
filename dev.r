@@ -18,7 +18,7 @@ devtools::build_readme()
 devtools::build_vignettes()
 
 # 4) check code
-# devtools::check()
+devtools::check()
 # devtools::check_man()
 # devtools::spell_check()
 # devtools::run_examples()

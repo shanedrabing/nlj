@@ -73,7 +73,7 @@ djohnson <- function(x, gamma = 0, delta = 1, xi = 0, lambda = 1) {
 #' @return A numeric vector of cumulative probabilities.
 #' @export
 pjohnson <- function(q, gamma = 0, delta = 1, xi = 0, lambda = 1) {
-    pnorm(gamma + delta * asinh((q - xi) / lambda))
+    stats::pnorm(gamma + delta * asinh((q - xi) / lambda))
 }
 
 #' Inverse Cumulative Distribution of Johnson SU
@@ -88,7 +88,7 @@ pjohnson <- function(q, gamma = 0, delta = 1, xi = 0, lambda = 1) {
 #' @return A numeric vector of quantiles.
 #' @export
 qjohnson <- function(p, gamma = 0, delta = 1, xi = 0, lambda = 1) {
-    xi + lambda * sinh((qnorm(p) - gamma) / delta)
+    xi + lambda * sinh((stats::qnorm(p) - gamma) / delta)
 }
 
 #' Random Deviates from Johnson SU Distribution
@@ -103,7 +103,7 @@ qjohnson <- function(p, gamma = 0, delta = 1, xi = 0, lambda = 1) {
 #' @return A numeric vector of random deviates.
 #' @export
 rjohnson <- function(n, gamma = 0, delta = 1, xi = 0, lambda = 1) {
-    xi + lambda * sinh((qnorm(runif(n)) - gamma) / delta)
+    xi + lambda * sinh((stats::qnorm(stats::runif(n)) - gamma) / delta)
 }
 
 
@@ -127,7 +127,7 @@ rjohnson <- function(n, gamma = 0, delta = 1, xi = 0, lambda = 1) {
 znorm <- function(x) {
     # parameterization
     mu <- mean(x)
-    sigma <- sd(x)
+    sigma <- stats::sd(x)
 
     # binding
     normalize <- function(q)
@@ -135,13 +135,13 @@ znorm <- function(x) {
     denormalize <- function(z)
         z * sigma + mu
     fd <- function(x)
-        dnorm(x, mu, sigma)
+        stats::dnorm(x, mu, sigma)
     fp <- function(q)
-        pnorm(q, mu, sigma)
+        stats::pnorm(q, mu, sigma)
     fq <- function(p)
-        qnorm(p, mu, sigma)
+        stats::qnorm(p, mu, sigma)
     fr <- function(n)
-        rnorm(n, mu, sigma)
+        stats::rnorm(n, mu, sigma)
 
     # return
     list(normalize = normalize,
@@ -172,25 +172,25 @@ znorm <- function(x) {
 zjohnson <- function(x) {
     # parameterization (Q-Q)
     gdxl <- c(gamma = 0, delta = 1, xi = 0, lambda = 1)
-    opt <- optim(gdxl, function(gdxl) {
+    opt <- stats::optim(gdxl, function(gdxl) {
         p <- pjohnson(x, gdxl[1], gdxl[2], gdxl[3], gdxl[4])
         qqtad(p[order(x)])
     })
 
     # parameterization (K-S test)
     gdxl <- opt$par
-    opt <- optim(gdxl, function(gdxl) {
+    opt <- stats::optim(gdxl, function(gdxl) {
         p <- pjohnson(x, gdxl[1], gdxl[2], gdxl[3], gdxl[4])
-        ks <- suppressWarnings(ks.test(qnorm(p), "pnorm"))
+        ks <- suppressWarnings(stats::ks.test(stats::qnorm(p), "stats::pnorm"))
         -ks$p.value
     })
 
     # binding
     gdxl <- opt$par
     normalize <- function(q)
-        qnorm(pjohnson(q, gdxl[1], gdxl[2], gdxl[3], gdxl[4]))
+        stats::qnorm(pjohnson(q, gdxl[1], gdxl[2], gdxl[3], gdxl[4]))
     denormalize <- function(z)
-        qjohnson(pnorm(z), gdxl[1], gdxl[2], gdxl[3], gdxl[4])
+        qjohnson(stats::pnorm(z), gdxl[1], gdxl[2], gdxl[3], gdxl[4])
     fd <- function(x)
         djohnson(x, gdxl[1], gdxl[2], gdxl[3], gdxl[4])
     fp <- function(q)
@@ -257,10 +257,10 @@ lm.gat <- function(formula, data = NULL,
 
     # binding
     evaluate <- function(prm) {
-        mut <- setNames(as.df(sapply(1:n, use.gasinh, sub, prm)), names(sub))
+        mut <- stats::setNames(as.df(sapply(1:n, use.gasinh, sub, prm)), names(sub))
 
         tryCatch({
-            m <- lm(formula, mut)
+            m <- stats::lm(formula, mut)
             loss <- sum(log(cosh(m$residuals)))
             cost <- penalty * mean(prm ^ 2)
             loss + cost
@@ -271,7 +271,7 @@ lm.gat <- function(formula, data = NULL,
 
     # optimization
     for (k in 1:iterations) {
-        opt <- optim(prm, evaluate)
+        opt <- stats::optim(prm, evaluate)
         prm <- opt$par
         if (verbose) {
             message("Loss: ", format(opt$value, scientific = TRUE))
@@ -280,8 +280,8 @@ lm.gat <- function(formula, data = NULL,
 
     # evaluation
     prm <- opt$par
-    mut <- setNames(as.df(sapply(1:n, use.gasinh, sub, prm)), names(sub))
-    m <- lm(formula, mut)
+    mut <- stats::setNames(as.df(sapply(1:n, use.gasinh, sub, prm)), names(sub))
+    m <- stats::lm(formula, mut)
 
     # binding
     detransform <- function(y)
