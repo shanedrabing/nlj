@@ -189,10 +189,10 @@ zjohnson <- function(x) {
 }
 
 
-# GENERALIZED ASINH TRANSFORMATION (GAT) MODEL
+# GENERALIZED ASINH TRANSFORMATION MODEL (GATM)
 
 
-#' Generalized Asinh Transformation (GAT) Model
+#' Generalized Asinh Transformation Model (GATM)
 #'
 #' Fits a linear model using the generalized asinh transformation.
 #'
