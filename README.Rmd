@@ -18,15 +18,6 @@ knitr::opts_chunk$set(
 
 # NLJ
 
-<!-- badges: start -->
-<p align="center">
-  <a href="https://github.com/shanedrabing/nlj/pulse" alt="Activity">
-      <img src="https://img.shields.io/github/commit-activity/m/shanedrabing/nlj" /></a>
-  <a href="https://github.com/shanedrabing/nlj/discussions" alt="Discussions">
-      <img src="https://img.shields.io/github/discussions/shanedrabing/nlj" /></a>
-</p>
-<!-- badges: end -->
-
 The goal of nlj is to provide functions for statistical transformations,
 distributions, and normalization methods, particularly leveraging the Johnson
 SU distribution and the generalized inverse hyperbolic sine transformation.

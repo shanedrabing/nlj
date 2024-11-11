@@ -3,15 +3,6 @@
 
 # NLJ
 
-<!-- badges: start -->
-<p align="center">
-<a href="https://github.com/shanedrabing/nlj/pulse" alt="Activity">
-<img src="https://img.shields.io/github/commit-activity/m/shanedrabing/nlj" /></a>
-<a href="https://github.com/shanedrabing/nlj/discussions" alt="Discussions">
-<img src="https://img.shields.io/github/discussions/shanedrabing/nlj" /></a>
-</p>
-<!-- badges: end -->
-
 The goal of nlj is to provide functions for statistical transformations,
 distributions, and normalization methods, particularly leveraging the
 Johnson SU distribution and the generalized inverse hyperbolic sine
@@ -101,7 +92,7 @@ qjohnson(0.5, gamma = 0, delta = 1, xi = 0, lambda = 1)
 ``` r
 # Generate 5 random deviates
 rjohnson(5, gamma = 0, delta = 1, xi = 0, lambda = 1)
-#> [1] -1.7232513  0.6292054  1.0705189 -2.1114994  0.1391506
+#> [1] -0.3939187  1.0338052  0.2323414 -2.5933367 -0.2915631
 ```
 
 ### Z-Score Normalization
