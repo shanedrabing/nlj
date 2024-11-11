@@ -67,3 +67,5 @@ devtools::build_readme()
 
     dev.off()
 }
+
+zjohnson(scale(mtcars$mpg)[, 1])
