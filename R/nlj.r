@@ -1,6 +1,10 @@
 # GENERAL
 
 
+sum_log_cosh <- function(m) {
+    sum(log(cosh(m$residuals)))
+}
+
 #' Total Absolute Deviation from Theoretical CDF
 #'
 #' Calculates the total absolute deviation from a theoretical cumulative distribution function (CDF).
@@ -218,7 +222,6 @@ zjohnson <- function(x) {
 #' @param verbose Logical, if TRUE, prints optimization progress (default = FALSE).
 #' @return A list containing:
 #'   \describe{
-#'     \item{predict}{A function to predict new data based on the fitted model.}
 #'     \item{detransform}{A function to reverse the generalized asinh transformation.}
 #'     \item{par}{Optimized transformation parameters for each variable.}
 #'     \item{fit}{Fitted linear model object.}
@@ -229,6 +232,7 @@ zjohnson <- function(x) {
 #'   }
 #' @export
 lm.gat <- function(formula, data = NULL,
+                   loss = sum_log_cosh,
                    iterations = 1, penalty = 1e-9,
                    verbose = FALSE) {
 
@@ -248,9 +252,8 @@ lm.gat <- function(formula, data = NULL,
 
         tryCatch({
             m <- stats::lm(formula, mut)
-            loss <- sum(log(cosh(m$residuals)))
             cost <- penalty * mean(prm ^ 2)
-            loss + cost
+            loss(m) + cost
         }, error = function(e) {
             Inf
         })
@@ -269,14 +272,8 @@ lm.gat <- function(formula, data = NULL,
     m <- stats::lm(formula, mut)
 
     detransform <- function(y) gsinh(y, prm[1], prm[2])
-    predict <- function(data) {
-        rhs <- all.names(formula)[-(1:3)]
-        sub <- data[, rhs]
-        predict(m, sub)
-    }
 
-    list(predict = predict,
-         detransform = detransform,
+    list(detransform = detransform,
          par = prm,
          fit = m,
          opt = opt,

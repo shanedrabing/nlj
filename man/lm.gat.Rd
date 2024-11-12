@@ -4,7 +4,14 @@
 \alias{lm.gat}
 \title{Generalized Asinh Transformation Model (GATM)}
 \usage{
-lm.gat(formula, data = NULL, iterations = 1, penalty = 1e-09, verbose = FALSE)
+lm.gat(
+  formula,
+  data = NULL,
+  loss = sum_log_cosh,
+  iterations = 1,
+  penalty = 1e-09,
+  verbose = FALSE
+)
 }
 \arguments{
 \item{formula}{An object of class \code{formula} for the model.}
@@ -20,7 +27,6 @@ lm.gat(formula, data = NULL, iterations = 1, penalty = 1e-09, verbose = FALSE)
 \value{
 A list containing:
 \describe{
-\item{predict}{A function to predict new data based on the fitted model.}
 \item{detransform}{A function to reverse the generalized asinh transformation.}
 \item{par}{Optimized transformation parameters for each variable.}
 \item{fit}{Fitted linear model object.}

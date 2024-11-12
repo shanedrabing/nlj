@@ -40,3 +40,25 @@ devtools::check()
     tryCatch(devtools::unload(), error = function(e) {})
     devtools::load_all()
 }
+
+{
+    detach(mtcars)
+    attach(mtcars)
+}
+
+formula <- qsec ~ hp * mpg * wt
+
+m <- lm(qsec ~ hp * mpg * wt, mtcars)
+gat <- nlj::lm.gat(qsec ~ hp * mpg * wt, mtcars,
+                   iterations = 6, penalty = 1e-9, verbose = TRUE)
+
+summary(m)
+summary(gat$fit)
+
+df <- data.frame(qsec = mtcars$qsec,
+                 simple = m$fitted.values,
+                 nonlin = gat$z)
+
+round(df, 2)
+sum(abs(log(df$qsec / df$simple)))
+sum(abs(log(df$qsec / df$nonlin)))
