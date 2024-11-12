@@ -39,33 +39,4 @@ devtools::check()
     # reset    
     tryCatch(devtools::unload(), error = function(e) {})
     devtools::load_all()
-
-    # plot
-    pdf("dev.pdf", 9, 6)
-
-    x <- sort(airquality$Wind)
-    d <- density(x)
-
-    zn <- znorm(x)
-    zj <- zjohnson(x)
-
-    xd <- d$x
-    yd <- d$y
-    yn <- zn$fd(xd)
-    yj <- zj$fd(xd)
-
-    plot(range(xd), range(c(yd, yn, yj)), type = "n",
-         main = "Wind Speed Density Estimation",
-         xlab = "Wind Speed", ylab = "Density")
-    lines(xd, yd, col = "black")
-    lines(xd, yn, col = "red")
-    lines(xd, yj, col = "blue")
-    legend(min(xd), max(c(yd, yn, yj)),
-           c("Kernel estimation", "Normal", "Johnson-SU"),
-           col = c("black", "red", "blue"),
-           lwd = 1, bg = "white")
-
-    dev.off()
 }
-
-zjohnson(scale(mtcars$mpg)[, 1])
