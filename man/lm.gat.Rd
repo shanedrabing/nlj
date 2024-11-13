@@ -18,6 +18,8 @@ lm.gat(
 
 \item{data}{An optional data frame for variable data.}
 
+\item{loss}{A function that defines the loss to be minimized (default = \code{sum_log_cosh}).}
+
 \item{iterations}{Integer, number of iterations for optimization (default = 1).}
 
 \item{penalty}{Numeric, regularization penalty (default = 1e-9).}

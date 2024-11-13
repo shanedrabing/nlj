@@ -1,6 +1,13 @@
 # GENERAL
 
 
+#' Sum of Log-Cosh Loss
+#'
+#' Computes the sum of the log-cosh of residuals, a smooth approximation to absolute error loss.
+#'
+#' @param m A linear model object, which should contain residuals.
+#' @return A single numeric value representing the sum of the log-cosh of the residuals.
+#' @export
 sum_log_cosh <- function(m) {
     sum(log(cosh(m$residuals)))
 }
@@ -217,6 +224,7 @@ zjohnson <- function(x) {
 #'
 #' @param formula An object of class `formula` for the model.
 #' @param data An optional data frame for variable data.
+#' @param loss A function that defines the loss to be minimized (default = `sum_log_cosh`).
 #' @param iterations Integer, number of iterations for optimization (default = 1).
 #' @param penalty Numeric, regularization penalty (default = 1e-9).
 #' @param verbose Logical, if TRUE, prints optimization progress (default = FALSE).
