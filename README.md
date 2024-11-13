@@ -183,6 +183,8 @@ variables (e.g., `hp`, `mpg`, `wt`) impact the outcome (`qsec`). This
 process emphasizes `lm.gat`’s flexibility for optimizing non-linear and
 interaction-heavy models.
 
+To begin, let’s examine the results of naive linear regression model.
+
 ``` r
 # Fit simple regression
 m <- lm(qsec ~ hp * mpg * wt, mtcars)
@@ -211,6 +213,12 @@ summary(m)
 #> Multiple R-squared:  0.7055, Adjusted R-squared:  0.6196 
 #> F-statistic: 8.215 on 7 and 24 DF,  p-value: 4.052e-05
 ```
+
+In the next code block, we apply `lm.gat` to fit a more flexible,
+non-linear model. Unlike the previous linear model, `lm.gat` uses a
+generalized asinh transformation to better capture non-linear
+interactions in the data. This approach is particularly effective for
+capturing complex relationships.
 
 ``` r
 # Fit complex regression
