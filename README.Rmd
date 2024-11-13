@@ -104,37 +104,6 @@ normalization, parameter binding, and denormalization capabilities. These
 normalization utilities are particularly helpful in preparing data for analysis
 or transformation to standardized forms.
 
-#### Z-score Normalization
-
-The `znorm` function applies traditional Z-score normalization. It computes the
-mean and standard deviation of the input data and offers built-in functions for
-denormalizing and calculating Z-score-based densities.
-
-```{r normal-density}
-# Example data: Wind speed
-x <- sort(airquality$Wind)
-d <- density(x)
-
-# Apply Z-score normalization
-zn <- nlj::znorm(x)
-
-# Extract the density estimates
-xd <- d$x
-yd <- d$y
-yn <- zn$fd(xd)
-
-# Plot the density comparison
-plot(range(xd), range(c(yd, yn)), type = "n",
-     main = "Wind Speed Density Estimation",
-     xlab = "Wind Speed", ylab = "Density")
-lines(xd, yd, col = "black")  # Original density
-lines(xd, yn, col = "red")    # Z-score normalized density
-legend(min(xd), max(c(yd, yn)),
-       c("Kernel", "Normal"),
-       col = c("black", "red"),
-       lwd = 1, bg = "white")
-```
-
 #### Johnson-SU Normalization
 
 The `zjohnson` function applies Johnson-SU normalization, suitable for data
@@ -143,10 +112,16 @@ Johnson-SU parameters to best match the input data's distribution, offering a
 transformation that can handle skewed and kurtotic data structures.
 
 ```{r johnson-density}
+# Example data: Wind speed
+x <- sort(airquality$Wind)
+d <- density(x)
+
 # Apply Johnson-SU normalization
 zj <- nlj::zjohnson(x)
 
 # Extract the density estimates
+xd <- d$x
+yd <- d$y
 yj <- zj$fd(xd)
 
 # Plot the density comparison
@@ -154,10 +129,10 @@ plot(range(xd), range(c(yd, yj)), type = "n",
      main = "Wind Speed Density Estimation",
      xlab = "Wind Speed", ylab = "Density")
 lines(xd, yd, col = "black")  # Original density
-lines(xd, yj, col = "blue")   # Johnson-SU normalized density
-legend(min(xd), max(c(yd, yn, yj)),
+lines(xd, yj, col = "red")   # Johnson-SU normalized density
+legend(min(xd), max(c(yd, yj)),
        c("Kernel", "Johnson-SU"),
-       col = c("black", "blue"),
+       col = c("black", "red"),
        lwd = 1, bg = "white")
 ```
 
@@ -169,6 +144,14 @@ transformation. This model can improve fit quality by adapting to non-linearity
 in data, especially when working with data where simple linear models fall
 short.
 
+#### Automatic Relationship Optimization
+
+This example demonstrates the `lm.gat` function's ability to fit a non-linear
+model to data by leveraging the generalized asinh transformation. Here,
+horsepower (`hp`) is used to predict miles per gallon (`mpg`), and both a
+simple and GATM model are fitted to highlight the latter's ability to capture
+more complex patterns.
+
 ```{r gatm}
 # Example data: Horsepower and miles per gallon (MPG)
 i <- order(mtcars$hp)
@@ -179,7 +162,7 @@ y <- mtcars$mpg[i]
 m <- lm(y ~ x)
 
 # Fit non-linear model
-gat <- nlj::lm.gat(y ~ x)
+gat <- nlj::lm.gat(y ~ x, iterations = 3)
 
 # Plot
 plot(x, y, pch = 16,
@@ -191,4 +174,27 @@ legend(min(x), max(y),
        c("Simple", "GATM"),
        col = c("red", "blue"),
        lwd = 1, bg = "white")
+```
+
+#### Complex Nonlinear Interaction Optimization
+
+In this example, `lm.gat` is used to fit a model with multiple interacting
+terms. This showcases the function's capacity to handle complex,
+high-dimensional relationships where interactions between variables (e.g.,
+`hp`, `mpg`, `wt`) impact the outcome (`qsec`). This process emphasizes
+`lm.gat`'s flexibility for optimizing non-linear and interaction-heavy models.
+
+```{r interaction-simple}
+# Fit simple regression
+m <- lm(qsec ~ hp * mpg * wt, mtcars)
+
+summary(m)
+```
+
+```{r interaction-complex}
+# Fit complex regression
+gat <- nlj::lm.gat(qsec ~ hp * mpg * wt, mtcars,
+                   iterations = 6, penalty = 1e-9)
+
+summary(gat$fit)
 ```
