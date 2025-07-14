@@ -250,8 +250,7 @@ lm.gat <- function(formula, data = NULL,
         gasinh(df[, i], prm[2 * (i - 1) + 1], prm[2 * (i - 1) + 2])
     }
 
-    env <- if (is.null(data)) environment(formula) else as.environment(data)
-    sub <- as.df(sapply(all.vars(formula), get, envir = env))
+    sub <- model.frame(formula, data, na.action = na.pass)
 
     n <- ncol(sub)
     prm <- rep(c(0, 1), n)
