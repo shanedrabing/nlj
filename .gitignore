@@ -44,11 +44,3 @@ po/*~
 
 # RStudio Connect folder
 rsconnect/
-
-# custom
-.Rproj.user
-/doc/
-/Meta/
-inst/doc
-test.*
-tests/sandbox.r
