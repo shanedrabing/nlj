@@ -21,7 +21,9 @@ sum_log_cosh <- function(m) {
 #' @return A single numeric value representing the total absolute deviation from the theoretical CDF.
 #' @export
 qqtad <- function(p) {
-    sum(abs(p - seq(0, 1, length.out = length(p))))
+    n <- length(p)
+    ref <- (seq_len(n) - 1) / (n - 1)
+    sum(abs(p - ref))
 }
 
 #' Generalized Inverse Hyperbolic Sine Transformation
