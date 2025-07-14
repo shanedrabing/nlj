@@ -1,6 +1,9 @@
 # GENERAL
 
 
+# :-)
+
+
 #' Sum of Log-Cosh Loss
 #'
 #' Computes the sum of the log-cosh of residuals, a smooth approximation to absolute error loss.
