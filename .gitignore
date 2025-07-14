@@ -46,8 +46,9 @@ po/*~
 rsconnect/
 
 # custom
-test.*
 .Rproj.user
-inst/doc
 /doc/
 /Meta/
+inst/doc
+test.*
+tests/sandbox.r
