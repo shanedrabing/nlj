@@ -1,7 +1,7 @@
 # PACKAGING
 
 # 0) Set working directory
-setwd("/Users/Shane/Code/packaging/nlj")
+setwd("/home/spooks/Code/github/nlj")
 
 # 1) Create framework
 # devtools::create("/Users/Shane/Code/packaging/nlj")
