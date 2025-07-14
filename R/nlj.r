@@ -252,7 +252,7 @@ lm.gat <- function(formula, data = NULL,
         gasinh(df[, i], prm[2 * (i - 1) + 1], prm[2 * (i - 1) + 2])
     }
 
-    sub <- model.frame(formula, data, na.action = na.pass)
+    sub <- stats::model.frame(formula, data, na.action = stats::na.pass)
 
     n <- ncol(sub)
     prm <- rep(c(0, 1), n)

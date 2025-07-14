@@ -9,3 +9,5 @@
 
 ^dev\.R$
 ^dev\.pdf$
+
+^docs

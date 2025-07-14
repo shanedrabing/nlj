@@ -3,41 +3,48 @@
 
 # NLJ
 
-The `nlj` package, named in honor of British statistician Norman Lloyd
-Johnson, provides specialized functions for working with the Johnson-SU
-(unbounded system) distribution. In addition to functions for Johnson-SU
-distribution computations, the package includes automatic normalization
-methods and a generalized transformation-based regression model
-leveraging the inverse hyperbolic sine transformation.
+The **nlj** package—named in honor of British statistician Norman Lloyd
+Johnson—provides specialized tools for working with the unbounded
+Johnson SU distribution. In addition to functions for density
+evaluation, distribution and quantile computation, and random variate
+generation, the package offers automatic normalization routines and a
+generalized transformation-based regression model that leverages the
+inverse hyperbolic sine transformation.
+
+------------------------------------------------------------------------
 
 ## Installation
 
-To install the development version of `nlj`, use the following commands:
+Install the development version of **nlj** from GitHub using
+**devtools**:
 
 ``` r
 # install.packages("devtools")
 devtools::install_github("shanedrabing/nlj")
 ```
 
+------------------------------------------------------------------------
+
 ## Overview of Functions and Examples
 
-The `nlj` package provides functions for working with Johnson-SU
-distribution metrics, normalization utilities, and advanced regression
-models. Below are examples that illustrate the primary functions
-available in the package.
+**nlj** provides a suite of tools for the Johnson SU distribution,
+automatic data normalization, and advanced regression modeling. The
+following examples demonstrate the package’s core functionality.
+
+------------------------------------------------------------------------
 
 ### Johnson-SU Distribution Functions
 
-The Johnson-SU distribution functions (`djohnson`, `pjohnson`,
-`qjohnson`, and `rjohnson`) allow for density, cumulative distribution,
-quantile, and random variate generation. Each function has built-in
-parameterization for the Johnson-SU distribution’s unique flexibility in
-skewness and kurtosis adjustments.
+The Johnson-SU distribution functions—**djohnson**, **pjohnson**,
+**qjohnson**, and **rjohnson**—provide density evaluation, cumulative
+distribution computation, quantile inversion, and random sample
+generation. They support the full Johnson-SU parameterization for
+flexible control of skewness and kurtosis.
 
 #### Density
 
-This function calculates the density of the Johnson-SU distribution for
-a given range of values.
+**djohnson** computes the Johnson-SU density for a specified set of
+input values.
 
 ``` r
 x <- seq(-pi, pi, length.out = 300)
@@ -51,8 +58,8 @@ plot(x, d, type = "l",
 
 #### Cumulative Distribution
 
-Use `pjohnson` to compute cumulative probabilities, allowing the mapping
-of quantiles within the distribution.
+**pjohnson** returns the cumulative distribution function (CDF) values
+for specified quantiles under the Johnson-SU model.
 
 ``` r
 q <- seq(-pi, pi, length.out = 300)
@@ -66,9 +73,9 @@ plot(q, p, type = "l",
 
 #### Quantile Function
 
-This function provides the quantile values for given cumulative
-probabilities, useful for probabilistic analysis within the Johnson-SU
-framework.
+**qjohnson** obtains the quantile (inverse CDF) corresponding to
+specified probability levels, facilitating probability-based analyses
+within the Johnson-SU framework.
 
 ``` r
 p <- seq(0, 1, length.out = 300)
@@ -82,28 +89,30 @@ plot(p, q, type = "l",
 
 #### Random Deviate Generation
 
-Generate random deviates from the Johnson-SU distribution with
-`rjohnson`, suitable for simulation or resampling needs.
+**rjohnson** generates random samples from the Johnson-SU distribution,
+useful for simulation, bootstrapping, or Monte Carlo studies.
 
 ``` r
 nlj::rjohnson(5, gamma = -1.7, delta = 2.1, xi = -1.45, lambda = 1.45)
 #> [1]  0.1163819  2.4153221 -0.9112831 -0.1996155  0.4708389
 ```
 
+------------------------------------------------------------------------
+
 ### Automatic Normalization Functions
 
-The package includes `znorm` and `zjohnson` functions, offering
-automatic normalization, parameter binding, and denormalization
-capabilities. These normalization utilities are particularly helpful in
-preparing data for analysis or transformation to standardized forms.
+The package provides **znorm** and **zjohnson**, automated normalization
+functions that compute and apply data transformations, track
+transformation parameters, and support denormalization. These utilities
+streamline the process of preparing data in standardized or
+distribution-adapted form.
 
 #### Johnson-SU Normalization
 
-The `zjohnson` function applies Johnson-SU normalization, suitable for
-data that may not conform to a Gaussian distribution. This function
-optimizes Johnson-SU parameters to best match the input data’s
-distribution, offering a transformation that can handle skewed and
-kurtotic data structures.
+**zjohnson** performs Johnson-SU normalization by estimating
+distribution parameters that align the input data to a standard normal
+reference. It adapts to skewness and heavy tails, producing a
+transformation that accommodates non-Gaussian data characteristics.
 
 ``` r
 # Example data: Wind speed
@@ -132,21 +141,23 @@ legend(min(xd), max(c(yd, yj)),
 
 <img src="man/figures/johnson-density-1.png" width="70%" />
 
+------------------------------------------------------------------------
+
 ### Generalized Asinh Transformation Model (GATM)
 
-The Generalized Asinh Transformation Model (`lm.gat`) provides a
-flexible approach to regression, using the generalized inverse
-hyperbolic sine transformation. This model can improve fit quality by
-adapting to non-linearity in data, especially when working with data
-where simple linear models fall short.
+**lm.gat** implements the Generalized Asinh Transformation Model,
+fitting regression models with a parameterized inverse hyperbolic sine
+transform on predictors. This approach can enhance model fit in the
+presence of nonlinearity, particularly when linear models are
+insufficient.
 
 #### Automatic Relationship Optimization
 
-This example demonstrates the `lm.gat` function’s ability to fit a
-non-linear model to data by leveraging the generalized asinh
-transformation. Here, horsepower (`hp`) is used to predict miles per
-gallon (`mpg`), and both a simple and GATM model are fitted to highlight
-the latter’s ability to capture more complex patterns.
+The following example illustrates **lm.gat** in action. We predict miles
+per gallon (**mpg**) from engine horsepower (**hp**) using both a
+standard linear model and a GATM model. The comparison highlights how
+the GATM transformation captures non-linear patterns that a simple
+linear fit does not.
 
 ``` r
 # Example data: Horsepower and miles per gallon (MPG)
@@ -176,14 +187,16 @@ legend(min(x), max(y),
 
 #### Complex Nonlinear Interaction Optimization
 
-In this example, `lm.gat` is used to fit a model with multiple
-interacting terms. This showcases the function’s capacity to handle
-complex, high-dimensional relationships where interactions between
-variables (e.g., `hp`, `mpg`, `wt`) impact the outcome (`qsec`). This
-process emphasizes `lm.gat`’s flexibility for optimizing non-linear and
-interaction-heavy models.
+The next example extends **lm.gat** to a model with multiple interaction
+terms, demonstrating its ability to manage high-dimensional, non-linear
+relationships. We illustrate this by modeling quarter-mile time
+(**qsec**) as a function of **hp**, **mpg**, and **wt**, including all
+two-way and three-way interactions.
 
-To begin, let’s examine the results of naive linear regression model.
+First, we fit a standard linear model with these terms and examine its
+summary. Then, we apply **lm.gat** to the same formula, showcasing how
+the parameterized asinh transformation can yield a superior fit by
+accommodating complex variable interactions.
 
 ``` r
 # Fit simple regression
@@ -213,12 +226,6 @@ summary(m)
 #> Multiple R-squared:  0.7055, Adjusted R-squared:  0.6196 
 #> F-statistic: 8.215 on 7 and 24 DF,  p-value: 4.052e-05
 ```
-
-In the next code block, we apply `lm.gat` to fit a more flexible,
-non-linear model. Unlike the previous linear model, `lm.gat` uses a
-generalized asinh transformation to better capture non-linear
-interactions in the data. This approach is particularly effective for
-capturing complex relationships.
 
 ``` r
 # Fit complex regression
