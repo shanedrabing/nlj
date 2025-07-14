@@ -229,3 +229,31 @@ summary(m)
 
 gat <- lm.gat(qsec ~ hp * mpg * wt, mtcars, iterations = 6, penalty = 1e-9)
 summary(gat$fit)
+
+
+# COMPARISONS
+
+
+# USArrests dataset
+summary(scale(summary(lm(Murder ~ Assault * UrbanPop * Rape, data = USArrests))$residuals))
+summary(scale(summary(lm.gat(Murder ~ Assault * UrbanPop * Rape, data = USArrests, iterations = 6, penalty = 1e-9)$fit)$residuals))
+
+# swiss dataset
+summary(scale(summary(lm(Fertility ~ Agriculture * Examination * Education, data = swiss))$residuals))
+summary(scale(summary(lm.gat(Fertility ~ Agriculture * Examination * Education, data = swiss, iterations = 6, penalty = 1e-9)$fit)$residuals))
+
+# trees dataset
+summary(scale(summary(lm(Volume ~ Girth * Height, data = trees))$residuals))
+summary(scale(summary(lm.gat(Volume ~ Girth * Height, data = trees, iterations = 6, penalty = 1e-9)$fit)$residuals))
+
+# airquality dataset (omit NAs)
+summary(scale(summary(lm(Ozone ~ Solar.R * Wind * Temp, data = na.omit(airquality)))$residuals))
+summary(scale(summary(lm.gat(Ozone ~ Solar.R * Wind * Temp, data = na.omit(airquality), iterations = 6, penalty = 1e-9)$fit)$residuals))
+
+# faithful dataset (simple nonlinear model)
+summary(scale(summary(lm(eruptions ~ waiting, data = faithful))$residuals))
+summary(scale(summary(lm.gat(eruptions ~ waiting, data = faithful, iterations = 6, penalty = 1e-9)$fit)$residuals))
+
+# CO2 dataset (numeric subset only)
+summary(scale(summary(lm(uptake ~ conc, data = subset(CO2, select = c(conc, uptake))))$residuals))
+summary(scale(summary(lm.gat(uptake ~ conc, data = subset(CO2, select = c(conc, uptake)), iterations = 6, penalty = 1e-9)$fit)$residuals))
