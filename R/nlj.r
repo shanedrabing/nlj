@@ -9,7 +9,8 @@
 #' @return A single numeric value representing the sum of the log-cosh of the residuals.
 #' @export
 sum_log_cosh <- function(m) {
-    sum(log(cosh(m$residuals)))
+    r <- m$residuals
+    sum(r + log1p(exp(-2 * r)) - log(2))
 }
 
 #' Total Absolute Deviation from Theoretical CDF
