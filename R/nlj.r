@@ -1,6 +1,18 @@
 # GENERAL
 
 
+#' Log-Cosh Loss
+#'
+#' Log-cosh of residuals, a smooth approximation to absolute error loss.
+#'
+#' @param m A linear model object, which should contain residuals.
+#' @return A single numeric value representing the sum of the log-cosh of the residuals.
+#' @export
+log_cosh <- function(r) {
+    a <- abs(r)
+    a + log1p(exp(-2 * a)) - log(2)
+}
+
 #' Sum of Log-Cosh Loss
 #'
 #' Computes the sum of the log-cosh of residuals, a smooth approximation to absolute error loss.
@@ -8,9 +20,8 @@
 #' @param m A linear model object, which should contain residuals.
 #' @return A single numeric value representing the sum of the log-cosh of the residuals.
 #' @export
-sum_log_cosh <- function(m) {
-    r <- m$residuals
-    sum(r + log1p(exp(-2 * r)) - log(2))
+sum_log_cosh <- function(lm_obj) {
+    sum(log_cosh(lm_obj$residuals))
 }
 
 #' Total Absolute Deviation from Theoretical CDF
